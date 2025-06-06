@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zen Tab – Peaceful Productivity Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="./icon-128.png" />
+    <style>
+      :root {
+        --color-gruvbox-bg0: #1d2021;
+        --color-gruvbox-bg1: #282828;
+        --color-gruvbox-bg2: #32302f;
+        --color-gruvbox-bg3: #3c3836;
+        --color-gruvbox-bg4: #504945;
+        --color-gruvbox-fg: #ebdbb2;
+        --color-gruvbox-fg2: #d5c4a1;
+        --color-gruvbox-fg3: #bdae93;
+        --color-gruvbox-fg4: #a89984;
+        --color-gruvbox-red: #fb4934;
+        --color-gruvbox-green: #b8bb26;
+        --color-gruvbox-yellow: #fabd2f;
+        --color-gruvbox-blue: #83a598;
+        --color-gruvbox-purple: #d3869b;
+        --color-gruvbox-aqua: #8ec07c;
+        --color-gruvbox-orange: #fe8019;
+        --color-gruvbox-gray: #928374;
+      }
+      body {
+        background-color: var(--color-gruvbox-bg0);
+        color: var(--color-gruvbox-fg);
+      }
+      .bg-primary {
+        background-color: var(--color-gruvbox-bg2);
+      }
+      .bg-highlight {
+        background-color: var(--color-gruvbox-yellow);
+      }
+      .text-highlight {
+        color: var(--color-gruvbox-yellow);
+      }
+      .text-muted {
+        color: var(--color-gruvbox-fg3);
+      }
+      .btn {
+        background-color: var(--color-gruvbox-yellow);
+        color: var(--color-gruvbox-bg0);
+      }
+      .btn:hover {
+        background-color: var(--color-gruvbox-orange);
+      }
+      .section-bg {
+        background-color: var(--color-gruvbox-bg1);
+      }
+      .section-dark {
+        background-color: var(--color-gruvbox-bg3);
+      }
+    </style>
+  </head>
+  <body class="font-sans">
+    <!-- Hero Section -->
+    <section class="section-bg px-6 py-20">
+      <div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
+        <!-- Left: Text Content -->
+        <div class="text-center md:text-left">
+          <img
+            src="./icon-128.png"
+            alt="Zen Tab Logo"
+            class="mx-auto mb-6 h-24 w-24 md:mx-0"
+          />
+          <h1 class="text-highlight text-4xl font-bold md:text-5xl">Zen Tab</h1>
+          <p class="text-muted mt-4 text-xl">
+            Turn every new tab into a calming command center. Zen Tab helps you
+            focus with seamless Jira integration and quick access to your tools.
+          </p>
+          <div class="mt-6">
+            <a
+              href="https://github.com/scifisatan/zen-tab"
+              target="_blank"
+              class="btn inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold transition"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.37 7.86 10.89.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.53-1.35-1.3-1.71-1.3-1.71-1.06-.73.08-.72.08-.72 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.74 1.27 3.41.97.11-.76.41-1.27.75-1.56-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.05 0 0 .98-.31 3.2 1.18a11.06 11.06 0 0 1 5.83 0C17.78 4.92 18.76 5.23 18.76 5.23c.63 1.58.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.67.42.36.8 1.07.8 2.16 0 1.56-.01 2.82-.01 3.21 0 .31.21.68.8.56A10.5 10.5 0 0 0 23.5 12c0-6.35-5.15-11.5-11.5-11.5z"
+                />
+              </svg>
+              View on GitHub
+            </a>
+            <a
+              href="https://github.com/scifisatan/zen-tab"
+              class="btn rounded-full px-6 py-3 font-semibold transition"
+              >Install Now</a
+            >
+          </div>
+        </div>
+        <!-- Right: Screenshot -->
+        <div>
+          <img
+            src="./screenshot.png"
+            alt="Zen Tab Screenshot"
+            class="mx-auto rounded-lg shadow-2xl"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="bg-primary px-6 py-16">
+      <div class="mx-auto max-w-4xl text-center">
+        <h2 class="text-highlight mb-10 text-3xl font-bold">Why Zen Tab?</h2>
+        <div class="grid gap-10 text-left md:grid-cols-2">
+          <div>
+            <h3 class="text-highlight text-xl font-semibold">
+              🔗 Unified Dashboard
+            </h3>
+            <p class="text-muted mt-2">
+              Access Jira issues, bookmarks, and tools instantly—right from your
+              new tab.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-highlight text-xl font-semibold">
+              🎯 Focus-First Design
+            </h3>
+            <p class="text-muted mt-2">
+              Minimalist dark UI to keep distractions at bay and productivity
+              flowing.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-highlight text-xl font-semibold">
+              ⚙️ Developer-Ready
+            </h3>
+            <p class="text-muted mt-2">
+              Designed for engineers who thrive on simplicity and efficiency.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-highlight text-xl font-semibold">
+              🧘 Custom Workflows
+            </h3>
+            <p class="text-muted mt-2">
+              Set your own Jira JQL, workspace, and API key. Your tab, your
+              flow.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Usage Section -->
+    <section class="section-dark px-6 py-16">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 class="text-highlight mb-6 text-3xl font-bold">How It Works</h2>
+        <p class="text-muted mb-6 text-lg">
+          Install the extension, enter your Atlassian API key, email, JQL, and
+          workspace domain. That’s it. Every new tab will now display your
+          current Jira tasks and custom shortcuts.
+        </p>
+        <p class="text-muted">Supports both Chrome and Firefox browsers.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-muted section-bg py-6 text-center text-sm">
+      &copy; 2025 Zen Tab. Built with ❤️ for peaceful productivity.
+    </footer>
+  </body>
+</html>

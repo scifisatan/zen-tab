@@ -1,0 +1,9 @@
+{
+  "summary": {
+    "en-US": "Zen Tab is an extension that transforms your new tab into a serene and productive workspace. Instantly view your assigned Jira issues and access your most-used work tools and personal links—all from a beautifully minimal dashboard."
+  },
+  "categories": ["other"],
+  "version": {
+    "license": "MIT"
+  }
+}

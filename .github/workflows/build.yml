@@ -1,0 +1,83 @@
+name: Build & Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+
+jobs:
+  build:
+    name: Build and Package Extensions
+    runs-on: ubuntu-latest
+
+    env:
+      FIREFOX_API_KEY: ${{ secrets.FIREFOX_API_KEY }}
+      FIREFOX_API_SECRET: ${{ secrets.FIREFOX_API_SECRET }}
+      CHROME_KEY_B64: ${{ secrets.CHROME_KEY_B64 }}
+      ADDON_SLUG: ${{ secrets.ADDON_SLUG }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
+
+      - name: ⚙️ Set up Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: 📦 Install dependencies
+        run: bun install
+
+      - name: 🛡️ Reconstruct key.pem
+        run: |
+          echo "$CHROME_KEY_B64" | base64 -d > key.pem
+
+      - name: 🔧 Build with Vite (Chrome)
+        run: bun run build:chrome
+
+      - name: 🔧 Build with Vite (Firefox)
+        run: bun run build:firefox
+
+      - name: 📦 Pack Chrome CRX
+        run: |
+          bun add -g crx
+          crx pack dist_chrome --private-key=key.pem 
+
+      - name: 🔐 Sign Firefox XPI
+        run: |
+          bun add -g web-ext
+          VERSION=$(jq -r .version dist_firefox/manifest.json)
+
+          echo "Checking if version $VERSION exists on AMO..."
+          RESPONSE=$(curl -s -H "Authorization: JWT $FIREFOX_API_KEY:$FIREFOX_API_SECRET" \
+            "https://addons.mozilla.org/api/v5/addons/$ADDON_SLUG/versions/$VERSION/")
+
+          if echo "$RESPONSE" | grep -q '"file":'; then
+            echo "Version $VERSION already exists. Downloading XPI..."
+            XPI_URL=$(echo "$RESPONSE" | jq -r '.file.url')
+            curl -L -o "$ADDON_SLUG-$VERSION.xpi" "$XPI_URL"
+          else
+            echo "Version $VERSION not found. Signing..."
+            web-ext sign \
+              --source-dir=dist_firefox \
+              --api-key="$FIREFOX_API_KEY" \
+              --api-secret="$FIREFOX_API_SECRET" \
+              --channel="unlisted" \
+              --amo-metadata=amo-metadata.json \
+              --artifacts-dir=.
+          fi
+
+
+      - name: 📤 Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            zen-tab.crx
+            *.xpi
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
