@@ -4,172 +4,142 @@
 
 # 🧘‍♂️ Zen Tab – Your Peaceful Productivity Dashboard
 
+<div align="center">
+
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/scifisatan/zen-tab)](https://github.com/scifisatan/zen-tab/releases)
+[![GitHub issues](https://img.shields.io/github/issues/scifisatan/zen-tab)](https://github.com/scifisatan/zen-tab/issues)
+[![GitHub stars](https://img.shields.io/github/stars/scifisatan/zen-tab)](https://github.com/scifisatan/zen-tab/stargazers)
+[![GitHub license](https://img.shields.io/github/license/scifisatan/zen-tab)](https://github.com/scifisatan/zen-tab/blob/main/LICENSE)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/scifisatan/zen-tab/build.yml?branch=main)](https://github.com/scifisatan/zen-tab/actions)
+
+</div>
+
 ![Screenshot](public/screenshot.png)
 
-> **Zen Tab** is a custom Chrome and Firefox extension that transforms your new tab into a serene and productive workspace. Instantly view your assigned Jira issues and access your most-used work tools and personal links—all from a beautifully minimal dashboard.
+> **Zen Tab** is a Chrome and Firefox extension that turns your new tab into a serene and productive workspace. Instantly view your Jira issues and access work/personal links from a beautifully minimal dashboard.
 
 ## ✨ Features
 
-- 🧩 **Jira Integration**  
-  Automatically fetch and display issues assigned to you via the Jira API.
+- 🧩 [**Jira Integration**](https://github.com/scifisatan/zen-tab/wiki/Jira-Integration)  
+  Automatically display issues assigned to you via the Jira API.
 
-- 🚀 **Quick Access Shortcuts**  
-  Organize your essential links under **Work**, **Social**, and **Tools** categories for easy access.
+- 🚀 [**Quick Access Shortcuts**](https://github.com/scifisatan/zen-tab/wiki/Using-the-Dashboard)  
+  Organize your links into **Work**, **Social**, and **Tools**.
 
-- 🌙 **Minimalist Dark UI**  
-  A clean, distraction-free interface to keep your focus where it matters.
+- 🌙 Minimalist Dark UI  
+  A distraction-free interface for focused work.
 
-- 🔄 **Real-Time Task Updates**  
-  Keep your task list up-to-date with a single click using the "Refresh" button.
+- 🔄 Real-Time Task Updates  
+  Click **Refresh** to sync your task list instantly.
 
-- 💻 **Built for Developers**  
-  Zen Tab is designed for engineers and professionals who want their tools and tasks in one place.
+- 💻 Built for Developers  
+  Zen Tab was made for engineers who want everything in one place.
 
-## 🔧 Chrome Installation Guide
+<details>
+<summary>
+<h2>
+<a href="https://github.com/scifisatan/zen-tab/wiki/Installation">🧭 Installation Guide</a>
+</h2>
+</summary>
 
-### Option 1: CRX File (Recommended)
+### Chrome
 
-1. Download the `.crx` file from the release
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable "Developer mode" (toggle in top right)
-4. Drag and drop the CRX file into the extensions page
-5. Click "Add extension" when prompted
+#### CRX File (Recommended)
 
-### Option 2: ZIP File (Alternative Method)
+1. Download `.crx` from [Releases](https://github.com/scifisatan/zen-tab/releases)
+2. Open `chrome://extensions/`
+3. Enable **Developer mode**
+4. Drag & drop the `.crx` file
 
-If Chrome blocks the CRX file or you prefer manual installation:
+#### ZIP File (Manual)
 
-1. Download the Chrome ZIP file from the release
-2. Extract the ZIP file to a folder
-3. Open Chrome and go to `chrome://extensions/`
-4. Enable "Developer mode" (toggle in top right)
-5. Click "Load unpacked"
-6. Select the extracted folder containing `manifest.json`
+1. Download & extract ZIP
+2. Load it via **Load Unpacked**
 
-### Option 3: Manual Installation (Advanced)
+### Firefox
 
-For development or if other methods fail:
+#### XPI File
 
-1. Download the source code from the repository
-2. Build the extension locally
-3. Extract to a folder
-4. Open Chrome and go to `chrome://extensions/`
-5. Enable "Developer mode" (toggle in top right)
-6. Click "Load unpacked"
-7. Select the extracted folder containing `manifest.json`
+1. Download `.xpi` from Releases
+2. Drag it into Firefox → Click **Add**
 
-### Troubleshooting
+#### ZIP File (Temporary Dev Mode)
 
-- Chrome may show security warnings for unpacked extensions
-- CRX files are signed and preferred for distribution
-- ZIP files provide a convenient unpacked version
-- Make sure "Developer mode" is enabled for ZIP/manual installation
-- Some enterprise Chrome installations may block extension installation
+1. Load via `about:debugging` → **Load Temporary Add-on**
 
-## 🦊 Firefox Installation Guide
+</details>
 
-### Option 1: XPI File (Recommended - if available)
+<details>
+<summary>
+<h2>⚙️ <a href="https://github.com/scifisatan/zen-tab/wiki/Jira-Integration">Jira Setup</a></h2>
+</summary>
 
-If an `.xpi` file is available in the release:
+<div align="center">
+  <img src="public/popup.png" alt="Zen Tab logo" />
+</div>
 
-1. Download the `.xpi` file
-2. Open Firefox
-3. Drag and drop the XPI file into Firefox
-4. Click "Add" when prompted
+You can configure Jira directly in the extension popup:
 
-### Option 2: ZIP File (Always Available)
+1. Open the extension by clicking the Zen Tab icon in your browser
+2. Fill in:
+   - **API Token**
+   - **Jira Domain** (e.g. `yourcompany.atlassian.net`)
+   - **Work Email** (your Jira login)
+   - **JQL Query** (default provided)
+3. Click **Test JQL Query** to preview your tasks
+4. Click **Save Settings**
 
-#### For Temporary Installation (Recommended for testing):
+> 🛡️ **Note:** Your settings are stored securely in your browser and never leave your device.
 
-1. Download the Firefox ZIP file from the release
-2. Extract the ZIP file to a folder
-3. Open Firefox and go to `about:debugging`
-4. Click "This Firefox" on the left
-5. Click "Load Temporary Add-on..."
-6. Navigate to the extracted folder and select `manifest.json`
+> 🔐 We're currently using [unscoped Jira API keys](https://id.atlassian.com/manage-profile/security/api-tokens) and will soon migrate to **OAuth-based scoped access** for improved security and control.
 
-**Note:** Temporary installations are removed when Firefox restarts.
+</details>
 
-#### For Permanent Installation (Developer Edition/Nightly only):
-
-1. Download the Firefox ZIP file from the release
-2. Extract the ZIP file
-3. Open Firefox Developer Edition or Nightly
-4. Go to `about:config` and set `xpinstall.signatures.required` to `false`
-5. Go to `about:addons`
-6. Click the gear icon → "Install Add-on From File"
-7. Select the ZIP file (or rename .zip to .xpi first)
-
-### Troubleshooting
-
-- Regular Firefox won't install unsigned extensions permanently
-- Use Firefox Developer Edition or Nightly for unsigned extensions
-- ZIP files work as temporary add-ons in all Firefox versions
-- If XPI signing failed, only the ZIP option will be available
-
-## 🛠️ Getting Started (Local Dev)
-
-### 1. Clone the Repository
+<details>
+<summary>
+<h2>🧪 <a href="https://github.com/scifisatan/zen-tab/wiki/Local-Development">Local Development</a></h2>
+</summary>
 
 ```bash
 git clone https://github.com/scifisatan/zen-tab.git
 cd zen-tab
-```
-
-### 2. Install Dependencies
-
-```bash
 npm install
-```
-
-### 3. Build the Extension
-
-```bash
 npm run build
 ```
 
-### 4. Load the Extension in Chrome
+Then:
 
-- Go to `chrome://extensions/`
-- Enable **Developer Mode**
-- Click **Load unpacked**
-- Select the `dist/` folder
+- Open `chrome://extensions/` → Load `dist/`
+- Or in Firefox: `about:debugging` → Load `dist/manifest.json`
 
-### 5. Load in Firefox (Optional)
+</details>
 
-- Go to `about:debugging`
-- Choose **Load Temporary Add-on**
-- Select `manifest.json` from the `dist/` folder
+<details>
+<summary>
+<h2>🛠 <a href="https://github.com/scifisatan/zen-tab/wiki/Production-Build-&-CI">Build & CI Setup</a></h2>
+</summary>
 
-## 📦 Production Builds via GitHub Actions
+Zen Tab uses GitHub Actions to:
 
-This project uses GitHub Actions to:
+- Build the extension on version tag push
+- Package `.crx` for Chrome
+- Sign `.xpi` for Firefox
+- Publish changelogs/releases automatically
 
-- 🔧 **Build the extension on tag push**
-- 🗜️ **Package for Chrome (`.crx`)**
-- 🔐 **Sign for Firefox (`.xpi`)**
-- 🚀 **Auto-generate changelogs and publish a GitHub Release**
+| Secret Name          | Use Case                       |
+| -------------------- | ------------------------------ |
+| `FIREFOX_API_KEY`    | Firefox signing API key        |
+| `FIREFOX_API_SECRET` | Firefox signing authentication |
+| `CHROME_KEY_B64`     | Encoded private key for `.crx` |
 
-### 🔐 Secrets Used in CI
+</details>
 
-To protect sensitive data, the build pipeline uses these GitHub Secrets:
+<details>
+<summary>
+<h2>🙋‍♂️ <a href="https://github.com/scifisatan/zen-tab/wiki/Contributing">Contributing & Feedback</a></h2>
+</summary>
 
-| Secret Name          | Purpose                               |
-| -------------------- | ------------------------------------- |
-| `FIREFOX_API_KEY`    | Sign the extension with Mozilla's API |
-| `FIREFOX_API_SECRET` | Authentication for Firefox signing    |
-| `CHROME_KEY_B64`     | Base64-encoded private key for `.crx` |
+We welcome PRs, issues, and suggestions!
+Start by opening an [issue](https://github.com/scifisatan/zen-tab/issues) or reading the [contribution guide](https://github.com/scifisatan/zen-tab/wiki/Contributing).
 
-> ⚠️ `key.pem` is **never stored in the repo** — it's injected at runtime via GitHub Secrets.
-
-You can view build artifacts on each [GitHub Release](https://github.com/scifisatan/zen-tab/releases) after pushing a tag like `v1.0.0`.
-
-## 🧑‍🎓 Ideal For
-
-- Developers who use Jira regularly
-- Productivity nerds who love clean dashboards
-- Anyone who wants a better, quieter new tab experience
-
-## 🧠 Contributing & Feedback
-
-Issues and PRs are welcome! If you'd like to contribute or suggest improvements, feel free to open an [Issue](https://github.com/scifisatan/zen-tab/issues).
+</details>
