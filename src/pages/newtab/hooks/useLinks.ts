@@ -4,7 +4,7 @@ import {
   defaultWorkLinks,
   defaultSocialLinks,
   defaultToolsLinks,
-} from "../constants";
+} from "@src/data";
 
 export const useLinks = () => {
   const [workLinks, setWorkLinks] = useStorage<Link[]>(
