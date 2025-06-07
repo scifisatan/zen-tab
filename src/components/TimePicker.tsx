@@ -1,109 +1,114 @@
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
 import { Clock } from "lucide-react";
+import { Hour, Minute, Time24hr } from "@/types/time";
+import { useState, useEffect } from "react";
+
+// Local editing state type - allows strings during editing
+type LocalTime = {
+  hour: string;
+  minute: string;
+};
+
+type TimeField = "hour" | "minute";
 
 interface TimePickerProps {
-  date: Date | string;
-  setDate: (date: Date) => void;
+  time: Time24hr;
+  setTime: (time: Time24hr) => void;
 }
 
-export function TimePicker({ date, setDate }: TimePickerProps) {
-  // Ensure we're working with a Date object
-  const ensureDate = (value: Date | string): Date => {
-    if (value instanceof Date) {
-      return value;
-    }
-    try {
-      return new Date(value);
-    } catch (e) {
-      console.error("Invalid date:", value);
-      return new Date();
-    }
+export function TimePicker({ time, setTime }: TimePickerProps) {
+  const [localTime, setLocalTime] = useState<LocalTime>({
+    hour: time.hour,
+    minute: time.minute,
+  });
+
+  useEffect(() => {
+    setLocalTime({
+      hour: time.hour,
+      minute: time.minute,
+    });
+  }, [time]);
+
+  // Generic handler for both hour and minute fields
+  const createTimeHandler = (field: TimeField) => {
+    const maxValue = field === "hour" ? 23 : 59;
+    const maxFirstDigit = field === "hour" ? 2 : 5;
+
+    return {
+      onChange: (value: string) => {
+        // Allow only digits and limit to 2 characters
+        const digitsOnly = value.replace(/\D/g, "").slice(0, 2);
+
+        // Always update the local display value first
+        setLocalTime((prev) => ({ ...prev, [field]: digitsOnly }));
+
+        // If empty, don't update parent yet
+        if (digitsOnly === "") {
+          return;
+        }
+
+        // Convert to number and validate range
+        const numValue = parseInt(digitsOnly);
+
+        // Only update parent if it's a valid complete value
+        if (digitsOnly.length === 2 && numValue >= 0 && numValue <= maxValue) {
+          const paddedValue = numValue.toString().padStart(2, "0") as
+            | Hour
+            | Minute;
+          setTime({ ...time, [field]: paddedValue });
+        } else if (
+          digitsOnly.length === 1 &&
+          numValue >= 0 &&
+          numValue <= maxFirstDigit
+        ) {
+          // Allow single digit input for valid first digits
+          // Don't update parent yet, wait for second digit or blur
+        }
+      },
+
+      onBlur: () => {
+        // On blur, ensure we have a valid 2-digit value
+        const currentValue = localTime[field];
+        if (currentValue === "" || currentValue.length === 0) {
+          const defaultValue = "00" as Hour | Minute;
+          setLocalTime((prev) => ({ ...prev, [field]: defaultValue }));
+          setTime({ ...time, [field]: defaultValue });
+        } else if (currentValue.length === 1) {
+          const paddedValue = currentValue.padStart(2, "0") as Hour | Minute;
+          setLocalTime((prev) => ({ ...prev, [field]: paddedValue }));
+          setTime({ ...time, [field]: paddedValue });
+        }
+      },
+    };
   };
 
-  const dateObj = ensureDate(date);
-
-  const hours = Array.from({ length: 24 }, (_, i) => i);
-  const minutes = Array.from({ length: 60 }, (_, i) => i);
-
-  const handleHourChange = (hour: number) => {
-    const newDate = new Date(dateObj);
-    newDate.setHours(hour);
-    setDate(newDate);
-  };
-
-  const handleMinuteChange = (minute: number) => {
-    const newDate = new Date(dateObj);
-    newDate.setMinutes(minute);
-    setDate(newDate);
-  };
+  const hourHandler = createTimeHandler("hour");
+  const minuteHandler = createTimeHandler("minute");
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            "bg-gruvbox-bg0 border-gruvbox-bg3 text-gruvbox-fg w-full justify-start text-left font-normal",
-            !date && "text-muted-foreground",
-          )}
-        >
-          <Clock className="mr-2 h-4 w-4" />
-          {format(dateObj, "HH:mm")}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <div className="bg-gruvbox-bg1 text-gruvbox-fg grid grid-cols-2 gap-2 p-3">
-          <div className="space-y-2">
-            <div className="text-gruvbox-yellow text-center font-medium">
-              Hour
-            </div>
-            <div className="no-scrollbar h-60 overflow-y-auto pr-2">
-              {hours.map((hour) => (
-                <div
-                  key={hour}
-                  onClick={() => handleHourChange(hour)}
-                  className={cn(
-                    "cursor-pointer rounded p-2 text-center",
-                    dateObj.getHours() === hour
-                      ? "bg-gruvbox-blue text-gruvbox-bg0"
-                      : "hover:bg-gruvbox-bg2",
-                  )}
-                >
-                  {hour.toString().padStart(2, "0")}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="space-y-2">
-            <div className="text-gruvbox-yellow text-center font-medium">
-              Minute
-            </div>
-            <div className="no-scrollbar h-60 overflow-y-auto pr-2">
-              {minutes.map((minute) => (
-                <div
-                  key={minute}
-                  onClick={() => handleMinuteChange(minute)}
-                  className={cn(
-                    "cursor-pointer rounded p-2 text-center",
-                    dateObj.getMinutes() === minute
-                      ? "bg-gruvbox-blue text-gruvbox-bg0"
-                      : "hover:bg-gruvbox-bg2",
-                  )}
-                >
-                  {minute.toString().padStart(2, "0")}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
+    <div className="flex items-center space-x-2">
+      <div className="flex items-center">
+        <Clock className="text-muted-foreground mr-2 h-4 w-4" />
+      </div>
+      <div className="flex items-center space-x-1">
+        <Input
+          type="text"
+          value={localTime.hour}
+          onChange={(e) => hourHandler.onChange(e.target.value)}
+          onBlur={hourHandler.onBlur}
+          className="w-16 text-center"
+          placeholder="HH"
+        />
+        <span className="text-xl">:</span>
+        <Input
+          type="text"
+          value={localTime.minute}
+          onChange={(e) => minuteHandler.onChange(e.target.value)}
+          onBlur={minuteHandler.onBlur}
+          className="w-16 text-center"
+          placeholder="MM"
+        />
+      </div>
+    </div>
   );
 }
