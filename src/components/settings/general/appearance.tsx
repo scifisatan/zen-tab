@@ -1,5 +1,3 @@
-import { Moon, Sun } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,21 +7,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/context/ThemeContext";
 
-export function ThemeToggle({ className }: { className: string }) {
-  const { setTheme } = useTheme();
+export const AppearanceSettings: React.FC<{}> = () => {
+  const { theme, setTheme } = useTheme();
 
   return (
-    <div className={className}>
+    <div className="flex w-full justify-between">
+      <p className="my-auto ml-1 text-sm font-medium">Toggle theme</p>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            size="icon"
-            className="bg-background/80 border-border/50 rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl"
+            className="bg-background/80 border-border/50 shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl"
           >
-            <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-            <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-            <span className="sr-only">Toggle theme</span>
+            {theme.charAt(0).toUpperCase() + theme.slice(1)}
+            {/* making first letter capital */}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -40,4 +37,4 @@ export function ThemeToggle({ className }: { className: string }) {
       </DropdownMenu>
     </div>
   );
-}
+};

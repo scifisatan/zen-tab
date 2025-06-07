@@ -12,6 +12,11 @@ const JiraTasksList: React.FC<JiraTasksListProps> = ({ jqlQuery }) => {
   const [tasks, setTasks] = useState<JiraTaskType[]>([]);
   const [loading, setLoading] = useState(false);
 
+  // use useQuery to fetch jira tasks based on jqlQuery
+  // we already have a function in api.ts
+  // useAsyncStorage or smth like this to store
+  // configurable interval?
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">

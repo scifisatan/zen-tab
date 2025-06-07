@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useDashboardConfig } from "@/hooks/useDashboardConfig";
+import { SettingsHeader } from "../SettingsHeader";
+import { SaveButton } from "../SaveButton";
 
-export const DashboardConfigForm: React.FC = () => {
+export const DashboardSettings: React.FC = () => {
   const { dashboardConfig, setDashboardConfig } = useDashboardConfig();
   const [rawConfig, setRawConfig] = useState("");
   const [hasChanges, setHasChanges] = useState(false);
@@ -35,29 +36,16 @@ export const DashboardConfigForm: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2">
-        <h3 className="text-gruvbox-yellow text-lg font-medium">
-          Dashboard Configuration
-        </h3>
-        <p className="text-gruvbox-fg3 text-sm">
-          Configure your dashboard using JSON format. Edit the configuration
-          below and click save to apply changes.
-        </p>
-      </div>
+      <SettingsHeader title="Dashboard Configuration" />
 
       <div className="space-y-4">
-        <div>
-          <Label htmlFor="dashboard-config-json" className="text-gruvbox-fg">
-            Configuration JSON
-          </Label>
-          <Textarea
-            id="dashboard-config-json"
-            value={rawConfig}
-            onChange={(e) => handleConfigChange(e.target.value)}
-            className="bg-gruvbox-bg0 border-gruvbox-bg3 text-gruvbox-fg h-96 font-mono text-sm"
-            placeholder="Enter your dashboard configuration..."
-          />
-        </div>
+        <Label htmlFor="dashboard-config-json">Configuration JSON</Label>
+        <Textarea
+          id="dashboard-config-json"
+          value={rawConfig}
+          onChange={(e) => handleConfigChange(e.target.value)}
+          placeholder="Enter your dashboard configuration..."
+        />
 
         {error && (
           <div className="rounded border border-red-800 bg-red-900/20 p-3 text-sm text-red-400">
@@ -65,15 +53,10 @@ export const DashboardConfigForm: React.FC = () => {
           </div>
         )}
       </div>
-
-      <div className="flex justify-end pt-4">
-        <Button
-          onClick={handleSave}
-          disabled={!hasChanges}
-          className="bg-gruvbox-yellow text-gruvbox-bg hover:bg-gruvbox-yellow/90"
-        >
+      <div className="pr-8">
+        <SaveButton onClick={handleSave} disabled={!hasChanges}>
           Save Dashboard Config
-        </Button>
+        </SaveButton>
       </div>
     </div>
   );

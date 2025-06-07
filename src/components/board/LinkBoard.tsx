@@ -3,8 +3,8 @@ import { Link, Section } from "@/types";
 import { Edit2, Trash2 } from "lucide-react";
 import { renderIcon } from "../../pages/newtab/utils/iconRenderer";
 import Card from "../../pages/newtab/components/ui/Card";
-import BoardTitle from "./BoardTitle";
-import BoardHeader from "./BoardHeader";
+import { BoardTitle } from "./BoardTitle";
+import { BoardHeader } from "./BoardHeader";
 import AddLink from "../../pages/newtab/components/AddLink";
 
 interface LinkBoardProps {

@@ -1,4 +1,4 @@
-type Hour =
+export type Hour =
   | "00"
   | "01"
   | "02"
@@ -24,7 +24,7 @@ type Hour =
   | "22"
   | "23";
 
-type Minute =
+export type Minute =
   | "00"
   | "01"
   | "02"
@@ -86,4 +86,7 @@ type Minute =
   | "58"
   | "59";
 
-export type Time24h = `${Hour}:${Minute}`;
+export type Time24hr = {
+  hour: Hour;
+  minute: Minute;
+};

@@ -26,8 +26,8 @@ const LinkItem: React.FC<LinkItemProps> = ({
         rel="noopener noreferrer"
         className="flex flex-grow items-center gap-3 transition-colors"
       >
-        <IconComponent size={20} className="text-gruvbox-yellow" />
-        <span>{link.name}</span>
+        <IconComponent className="text-lg" />
+        <span className="text-lg">{link.name}</span>
       </a>
 
       {isEditable && (
@@ -44,7 +44,7 @@ const LinkItem: React.FC<LinkItemProps> = ({
             }}
             className="rounded p-1"
           >
-            <Icons.Edit size={16} className="text-gruvbox-blue" />
+            <Icons.Edit className="text-lg text-blue-300" />
           </button>
           <button
             onClick={(e) => {
@@ -53,7 +53,7 @@ const LinkItem: React.FC<LinkItemProps> = ({
             }}
             className="rounded p-1"
           >
-            <Icons.Trash size={16} className="text-gruvbox-red" />
+            <Icons.Trash className="text-lg text-red-300" />
           </button>
         </div>
       )}

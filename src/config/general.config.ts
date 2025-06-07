@@ -1,8 +1,14 @@
 import { timeConfig, GeneralConfig, DayIndex } from "@/types/general";
 
 const defaultTimeConfig: timeConfig = {
-  clockInTime: "09:00",
-  clockOutTime: "16:30",
+  clockInTime: {
+    hour: "09",
+    minute: "00",
+  },
+  clockOutTime: {
+    hour: "16",
+    minute: "30",
+  },
 };
 
 const weekendDays: DayIndex[] = [0, 6];

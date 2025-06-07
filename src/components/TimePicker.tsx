@@ -88,7 +88,7 @@ export function TimePicker({ time, setTime }: TimePickerProps) {
   return (
     <div className="flex items-center space-x-2">
       <div className="flex items-center">
-        <Clock className="text-muted-foreground mr-2 h-4 w-4" />
+        <Clock className="text-muted-foreground h-4 w-4" />
       </div>
       <div className="flex items-center space-x-1">
         <Input

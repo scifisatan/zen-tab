@@ -4,7 +4,7 @@ import { SectionRow } from "./SectionRow";
 
 export function Section({ section }: { section: Section }) {
   return (
-    <div className="no-scrollbar flex h-full flex-1 flex-col overflow-y-auto pb-4">
+    <div className="no-scrollbar flex h-full flex-1 flex-col overflow-y-auto p-4">
       <SectionTitle title={section.title} />
       <div className="flex flex-col gap-8">
         {section.rows.map((row) => (

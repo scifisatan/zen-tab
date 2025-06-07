@@ -6,7 +6,8 @@ export interface JiraConfig {
 
 export interface JiraTask {
   key: string;
-  summary: string;
+  title: string;
   status: string;
-  priority?: string;
+  priority: string;
+  url: string;
 }

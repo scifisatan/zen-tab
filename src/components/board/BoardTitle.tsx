@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export default function BoardTitle({
+export function BoardTitle({
   icon,
   title,
 }: {

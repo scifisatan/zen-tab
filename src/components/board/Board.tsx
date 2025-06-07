@@ -8,13 +8,13 @@ import LinksList from "../LinkList";
 import JiraTasksList from "../JiraTasksList";
 import { Plus } from "lucide-react";
 
-export default function Board({ board }: { board: Board }) {
+export function Board({ board }: { board: Board }) {
   const [isAddLinkOpen, setIsAddLinkOpen] = useState(false);
   const [currentEditLink, setCurrentEditLink] = useState<Link | null>(null);
 
   return (
     <div className="flex flex-1">
-      <Card className="w-full">
+      <Card className="w-full gap-2">
         <CardHeader className="flex justify-between">
           <BoardTitle title={board.title} />
           {board.type === "links" && (

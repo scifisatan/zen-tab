@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { SectionType, Link } from "@/types";
+import { Section, Link } from "@/types";
 
 export const useModal = () => {
   const [showModal, setShowModal] = useState(false);
-  const [currentSection, setCurrentSection] = useState<SectionType | "">("");
+  const [currentSection, setCurrentSection] = useState<Section | "">("");
   const [linkName, setLinkName] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
   const [editingLink, setEditingLink] = useState<Link | null>(null);
 
-  const openModal = (section: SectionType) => {
+  const openModal = (section: Section) => {
     setCurrentSection(section);
     setShowModal(true);
   };
 
-  const openEditModal = (section: SectionType, link: Link) => {
+  const openEditModal = (section: Section, link: Link) => {
     setCurrentSection(section);
     setEditingLink(link);
     setLinkName(link.name);

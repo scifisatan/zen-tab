@@ -1,8 +1,7 @@
-import { JiraConfig, Task } from "@/types";
+import { JiraConfig, JiraTask } from "@/types";
 
-export async function getMyJiraTasks(config: JiraConfig) {
-  // Ensure domain has proper format for API calls
-  let domain = config.jiraDomain;
+export async function getMyJiraTasks(config: JiraConfig, jql: string) {
+  let domain = config.domain;
   if (!domain.startsWith("https://")) {
     domain = `https://${domain}`;
   }
@@ -11,7 +10,7 @@ export async function getMyJiraTasks(config: JiraConfig) {
   }
 
   const response = await fetch(
-    `${domain}rest/api/3/search?jql=${encodeURIComponent(config.jql ?? "")}`,
+    `${domain}rest/api/3/search?jql=${encodeURIComponent(jql ?? "")}`,
     {
       method: "GET",
       headers: {
@@ -29,7 +28,7 @@ export async function getMyJiraTasks(config: JiraConfig) {
 
   const data: { issues: any[] } = await response.json();
 
-  const tasks: Task[] = data.issues.map((issue) => {
+  const tasks: JiraTask[] = data.issues.map((issue) => {
     return {
       key: issue.key,
       title: issue.fields.summary,
