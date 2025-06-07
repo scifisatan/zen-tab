@@ -19,7 +19,7 @@ const LinkItem: React.FC<LinkItemProps> = ({
   const IconComponent = (Icons as any)[link.icon] || Icons.Link;
 
   return (
-    <div className="group hover:bg-background/30 my-1 flex items-center justify-between rounded-xl p-2 px-1 py-2 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg">
+    <div className="group hover:bg-background/30 my-1 flex items-center justify-between rounded-md p-2 px-1 py-2 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg">
       <a
         href={link.url}
         target="_blank"
