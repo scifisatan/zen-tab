@@ -10,8 +10,6 @@ export const useDashboardConfig = () => {
     defaultDashboardConfig,
   );
 
-  console.log("Dashboard Conifg:", dashboardConfig);
-
   return {
     dashboardConfig,
     setDashboardConfig,

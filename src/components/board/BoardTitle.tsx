@@ -8,7 +8,7 @@ export function BoardTitle({
   title: string;
 }) {
   return (
-    <div className="align-center text-gruvbox-fg m-0 flex gap-3 text-2xl font-bold">
+    <div className="align-center m-0 flex gap-3 text-2xl font-bold">
       {icon && (
         <div className="item-center flex flex-col justify-center">{icon}</div>
       )}

@@ -1,7 +1,6 @@
 import { JiraConfig, JiraTask } from "@/types";
 
 export async function getMyJiraTasks(config: JiraConfig, jql: string) {
-  console.log("trying to run api calls", config);
   let domain = config.domain;
   if (!domain.startsWith("https://")) {
     domain = `https://${domain}`;
@@ -10,26 +9,26 @@ export async function getMyJiraTasks(config: JiraConfig, jql: string) {
     domain += "/";
   }
 
-  const response = await fetch(
-    `${domain}rest/api/3/search?jql=${encodeURIComponent(jql ?? "")}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: "Basic " + btoa(`${config.email}:${config.apiToken}`),
-        Accept: "application/json",
-      },
+  const url = `${domain}rest/api/3/search?jql=${encodeURIComponent(jql ?? "")}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: "Basic " + btoa(`${config.email}:${config.apiToken}`),
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
-  );
+  });
 
   if (!response.ok) {
+    const errorText = await response.text();
+    console.error("Error response:", errorText);
     throw new Error(
-      `Error fetching tasks: ${response.status} ${response.statusText}`,
+      `Error fetching tasks: ${response.status} ${response.statusText}. ${errorText}`,
     );
   }
 
   const data: { issues: any[] } = await response.json();
-
-  console.log(data);
 
   const tasks: JiraTask[] = data.issues.map((issue) => {
     return {
@@ -42,4 +41,41 @@ export async function getMyJiraTasks(config: JiraConfig, jql: string) {
   });
 
   return tasks;
+}
+
+// Function to communicate with background script for JIRA tasks
+export async function getJiraTasksFromBackground(
+  jqlQuery: string,
+): Promise<JiraTask[]> {
+  return new Promise((resolve, reject) => {
+    // Add timeout for the message
+    const timeout = setTimeout(() => {
+      reject(new Error("Request timeout - background script not responding"));
+    }, 10000); // 10 second timeout
+
+    chrome.runtime.sendMessage(
+      { action: "getJiraTasks", jqlQuery },
+      (response) => {
+        clearTimeout(timeout);
+
+        if (chrome.runtime.lastError) {
+          console.error("Chrome runtime error:", chrome.runtime.lastError);
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
+
+        if (!response) {
+          reject(new Error("No response from background script"));
+          return;
+        }
+
+        if (response.success) {
+          resolve(response.tasks);
+        } else {
+          console.error("Background script error:", response.error);
+          reject(new Error(response.error));
+        }
+      },
+    );
+  });
 }

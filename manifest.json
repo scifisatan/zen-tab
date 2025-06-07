@@ -11,6 +11,11 @@
     "128": "icon-128.png"
   },
   "permissions": ["activeTab", "storage"],
+  "host_permissions": [
+    "https://*.atlassian.net/*",
+    "https://*.atlassian.com/*",
+    "https://*.jira.com/*"
+  ],
   "background": {
     "service_worker": "src/pages/background/index.ts"
   },

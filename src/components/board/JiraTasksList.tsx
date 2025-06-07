@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { RefreshCw, AlertCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useStorage } from "@/hooks/useStorage";
-import { getMyJiraTasks } from "@/api";
+import { getJiraTasksFromBackground } from "@/api";
 import { useJiraConfig } from "@/hooks/useJiraConfig";
 
 interface JiraTasksListProps {
@@ -29,18 +29,22 @@ const JiraTasksList: React.FC<JiraTasksListProps> = ({ jqlQuery }) => {
     dataUpdatedAt,
   } = useQuery({
     queryKey: ["jiraTasks", jqlQuery, jiraConfig.domain],
-    queryFn: () => getMyJiraTasks(jiraConfig, jqlQuery),
+    queryFn: () => getJiraTasksFromBackground(jqlQuery),
     enabled:
       !!jqlQuery &&
-      !!jiraConfig.domain &&
       !!jiraConfig.apiToken &&
+      !!jiraConfig.domain &&
       !!jiraConfig.email,
     refetchInterval: 5 * 60 * 1000, // 5 minutes
     staleTime: 2 * 60 * 1000, // 2 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
     retry: (failureCount, error) => {
-      // Don't retry on auth errors
-      if (error?.message?.includes("401") || error?.message?.includes("403")) {
+      // Don't retry on auth errors or config errors
+      if (
+        error?.message?.includes("401") ||
+        error?.message?.includes("403") ||
+        error?.message?.includes("configuration")
+      ) {
         return false;
       }
       return failureCount < 3;
@@ -89,7 +93,14 @@ const JiraTasksList: React.FC<JiraTasksListProps> = ({ jqlQuery }) => {
         </div>
       </div>
 
-      {isError ? (
+      {!jiraConfig ? (
+        <div className="rounded-md border border-yellow-200 bg-yellow-50 p-3">
+          <p className="text-sm text-yellow-800">
+            Jira configuration incomplete. Please configure your Jira settings
+            in the extension settings.
+          </p>
+        </div>
+      ) : isError ? (
         <div className="rounded-md border border-red-200 bg-red-50 p-3">
           <p className="text-sm text-red-800">
             {error?.message || "Failed to fetch tasks"}
