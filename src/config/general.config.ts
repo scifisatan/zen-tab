@@ -31,9 +31,19 @@ const clockedOutMessages = [
   "Clocked out! Your evening awaits 🌆",
 ];
 
+const weekendMessages = [
+  "Work's done! Time to unwind 🌅",
+  "You've clocked out, enjoy your evening! 🌙",
+  "Office hours are over, relax and recharge ✨",
+  "Time to step away from work and breathe 🍃",
+  "Work day complete! Time for yourself now 🧘‍♂️",
+  "Clocked out! Your evening awaits 🌆",
+];
+
 export const defaultGeneralConfig: GeneralConfig = {
   weekendDays: weekendDays,
   timeConfig: defaultTimeConfig,
   relaxingMessages: relaxingMessages,
   clockedOutMessages: clockedOutMessages,
+  weekendMessages: weekendMessages,
 };

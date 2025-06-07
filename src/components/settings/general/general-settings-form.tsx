@@ -6,7 +6,7 @@ import { AppearanceSettings } from "./appearance";
 import { WeekendSettings } from "./weekend";
 import { OfficeHoursSettings } from "./office-hours";
 import { CustomMessagesSettings } from "./custom-messages";
-import { SettingsHeader } from "../SettingsHeader";
+import { SettingsHeader } from "../SettingsFormHeader";
 import { SaveButton } from "../SaveButton";
 
 interface SettingSection {
@@ -83,7 +83,9 @@ export const GeneralSettings: React.FC = () => {
           return (
             <Card key={index} className="gap-2 py-4">
               <CardHeader>
-                <CardTitle className="text-base">{section.title}</CardTitle>
+                <CardTitle className="text-semi-bold text-lg">
+                  {section.title}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <SectionComponent

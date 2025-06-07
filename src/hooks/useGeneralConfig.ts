@@ -3,11 +3,11 @@ import { defaultGeneralConfig } from "@/config/general.config";
 import { useStorage } from "@/hooks/useStorage";
 import { useMemo } from "react";
 
-const HEADER_STORAGE_KEY = "zen_tab_header_config";
+const GENERAL_STORAGE_KEY = "zen_tab_general_config";
 
 export const useGeneralConfig = () => {
   const [generalConfig, setGeneralConfig] = useStorage<GeneralConfig>(
-    HEADER_STORAGE_KEY,
+    GENERAL_STORAGE_KEY,
     defaultGeneralConfig,
   );
 

@@ -36,7 +36,7 @@ export const WeekendSettings: React.FC<{
           />
           <Label
             htmlFor={`weekend-${dayIndex}`}
-            className="cursor-pointer text-xs font-medium select-none"
+            className="cursor-pointer text-base font-medium select-none"
           >
             {dayName}
           </Label>

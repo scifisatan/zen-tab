@@ -12,4 +12,5 @@ export interface GeneralConfig {
   timeConfig: timeConfig;
   relaxingMessages: string[];
   clockedOutMessages: string[];
+  weekendMessages: string[];
 }

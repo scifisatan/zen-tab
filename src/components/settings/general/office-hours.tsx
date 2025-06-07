@@ -23,14 +23,14 @@ export const OfficeHoursSettings: React.FC<{
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div className="space-y-2">
-        <Label className="text-sm font-medium">Clock In Time</Label>
+        <Label className="text-base font-medium">Clock In Time</Label>
         <TimePicker
           time={formData.timeConfig?.clockInTime}
           setTime={(time) => handleClockTimeChange("clockInTime", time)}
         />
       </div>
       <div className="space-y-2">
-        <Label className="text-sm font-medium">Clock Out Time</Label>
+        <Label className="text-base font-medium">Clock Out Time</Label>
         <TimePicker
           time={formData.timeConfig?.clockOutTime}
           setTime={(time) => handleClockTimeChange("clockOutTime", time)}

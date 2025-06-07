@@ -1,11 +1,11 @@
-import BoardTitle from "@/components/board/BoardTitle";
+import { BoardTitle } from "@/components/board/BoardTitle";
 import { Board, Link } from "@/types";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import LinkFormDialog from "../LinkFormDialog";
-import LinksList from "../LinkList";
-import JiraTasksList from "../JiraTasksList";
+import LinksList from "./LinkList";
+import JiraTasksList from "./JiraTasksList";
 import { Plus } from "lucide-react";
 
 export function Board({ board }: { board: Board }) {
@@ -18,7 +18,7 @@ export function Board({ board }: { board: Board }) {
         <CardHeader className="flex justify-between">
           <BoardTitle title={board.title} />
           {board.type === "links" && (
-            <Button variant="secondary" onClick={() => setIsAddLinkOpen(true)}>
+            <Button variant="outline" onClick={() => setIsAddLinkOpen(true)}>
               <Plus />
             </Button>
           )}

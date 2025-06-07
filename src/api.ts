@@ -1,6 +1,7 @@
 import { JiraConfig, JiraTask } from "@/types";
 
 export async function getMyJiraTasks(config: JiraConfig, jql: string) {
+  console.log("trying to run api calls", config);
   let domain = config.domain;
   if (!domain.startsWith("https://")) {
     domain = `https://${domain}`;
@@ -28,12 +29,14 @@ export async function getMyJiraTasks(config: JiraConfig, jql: string) {
 
   const data: { issues: any[] } = await response.json();
 
+  console.log(data);
+
   const tasks: JiraTask[] = data.issues.map((issue) => {
     return {
       key: issue.key,
       title: issue.fields.summary,
       status: issue.fields.status.name,
-      priority: issue.fields.priority,
+      priority: issue.fields.priority.id,
       url: `${domain}browse/${issue.key}`,
     };
   });

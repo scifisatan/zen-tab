@@ -7,7 +7,7 @@ export const CustomMessagesSettings: React.FC<{
   updateFormData: any;
 }> = ({ formData, updateFormData }) => {
   const handleMessagesChange = (
-    field: "relaxingMessages" | "clockedOutMessages",
+    field: "relaxingMessages" | "clockedOutMessages" | "weekendMessages",
     value: string,
   ) => {
     const messages = value.split("\n");
@@ -20,7 +20,7 @@ export const CustomMessagesSettings: React.FC<{
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="relaxing-messages" className="text-sm font-medium">
+        <Label htmlFor="relaxing-messages" className="text-base font-medium">
           Before Office Hours
         </Label>
         <Textarea
@@ -34,7 +34,7 @@ export const CustomMessagesSettings: React.FC<{
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="clockedout-messages" className="text-sm font-medium">
+        <Label htmlFor="clockedout-messages" className="text-base font-medium">
           After Office Hours
         </Label>
         <Textarea
@@ -43,6 +43,20 @@ export const CustomMessagesSettings: React.FC<{
           value={(formData.clockedOutMessages || []).join("\n")}
           onChange={(e) =>
             handleMessagesChange("clockedOutMessages", e.target.value)
+          }
+          className="min-h-[80px] resize-y text-sm"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="clockedout-messages" className="text-base font-medium">
+          During Weekends
+        </Label>
+        <Textarea
+          id="Weekend-messages"
+          placeholder="Its the weekend, you should go away and have fun"
+          value={(formData.weekendMessages || []).join("\n")}
+          onChange={(e) =>
+            handleMessagesChange("weekendMessages", e.target.value)
           }
           className="min-h-[80px] resize-y text-sm"
         />

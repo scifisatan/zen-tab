@@ -1,25 +1,31 @@
 import { ThemeProvider } from "@/context/ThemeContext";
 import { MainLayout } from "@/components/MainLayout";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/DashboardHeader";
 import { useState } from "react";
-import ConfigFormDialog from "@/components/ConfigFormDialog";
-import ConfigFormDialogToggle from "@/components/ConfigFormDialogToggle";
+import SettingsDialog, { SettingsDialogToggle } from "@/components/settings";
 import Dashboard from "@/components/Dashboard";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryclient = new QueryClient();
 
 const App = () => {
-  const [configDialogOpen, setConfigDialogOpen] = useState(false);
+  const [isSettingsDialogVisible, setIsSettingsDialogVisible] = useState(false);
 
   return (
     <ThemeProvider>
-      <MainLayout>
-        <Header />
-        <Dashboard />
-        <ConfigFormDialog
-          isOpen={configDialogOpen}
-          onClose={() => setConfigDialogOpen(false)}
-        />
-        <ConfigFormDialogToggle setConfigDialogOpen={setConfigDialogOpen} />
-      </MainLayout>
+      <QueryClientProvider client={queryclient}>
+        <MainLayout>
+          <Header />
+          <Dashboard />
+          <SettingsDialog
+            isOpen={isSettingsDialogVisible}
+            onClose={() => setIsSettingsDialogVisible(false)}
+          />
+          <SettingsDialogToggle
+            openSettingsDialog={setIsSettingsDialogVisible}
+          />
+        </MainLayout>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 };

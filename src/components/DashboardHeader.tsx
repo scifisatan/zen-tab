@@ -3,7 +3,7 @@ import { useTime } from "@/hooks/useTime";
 
 export const Header = () => {
   const [showCurrentTime, setShowCurrentTime] = useState(true);
-  const { greeting, formatCurrentTime, formatMessage, currentTime } = useTime();
+  const { greeting, formatCurrentTime, customMessage, currentTime } = useTime();
 
   const toggleShowCurentTime = () => {
     setShowCurrentTime(!showCurrentTime);
@@ -17,9 +17,7 @@ export const Header = () => {
           className="cursor-pointer text-xl opacity-70 transition-opacity select-none hover:opacity-100"
           onClick={toggleShowCurentTime}
         >
-          {showCurrentTime
-            ? formatCurrentTime(currentTime)
-            : formatMessage(currentTime)}
+          {showCurrentTime ? formatCurrentTime(currentTime) : customMessage}
         </div>
       </div>
     </>

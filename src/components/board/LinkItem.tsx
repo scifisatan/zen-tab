@@ -19,7 +19,7 @@ const LinkItem: React.FC<LinkItemProps> = ({
   const IconComponent = (Icons as any)[link.icon] || Icons.Link;
 
   return (
-    <div className="group flex items-center justify-between rounded-md px-1 py-2 transition-colors">
+    <div className="group hover:bg-background/30 my-1 flex items-center justify-between rounded-xl p-2 px-1 py-2 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg">
       <a
         href={link.url}
         target="_blank"
@@ -44,7 +44,7 @@ const LinkItem: React.FC<LinkItemProps> = ({
             }}
             className="rounded p-1"
           >
-            <Icons.Edit className="text-lg text-blue-300" />
+            <Icons.Edit size={18} />
           </button>
           <button
             onClick={(e) => {
@@ -53,7 +53,7 @@ const LinkItem: React.FC<LinkItemProps> = ({
             }}
             className="rounded p-1"
           >
-            <Icons.Trash className="text-lg text-red-300" />
+            <Icons.Trash size={18} />
           </button>
         </div>
       )}

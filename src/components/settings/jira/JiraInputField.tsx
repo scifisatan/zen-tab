@@ -21,7 +21,7 @@ export const JiraInputField: React.FC<JiraInputFieldProps> = ({
 }) => {
   return (
     <div className="space-y-2">
-      <Label htmlFor={id} className="text-semibold">
+      <Label htmlFor={id} className="text-base font-semibold">
         {label}
       </Label>
       <Input

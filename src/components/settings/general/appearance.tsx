@@ -12,7 +12,7 @@ export const AppearanceSettings: React.FC<{}> = () => {
 
   return (
     <div className="flex w-full justify-between">
-      <p className="my-auto ml-1 text-sm font-medium">Toggle theme</p>
+      <p className="my-auto ml-1 text-base font-medium">Toggle theme</p>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
