@@ -1,20 +1,20 @@
 import React, { ReactNode } from "react";
-import { Link, SectionType } from "@src/types";
+import { Link, Section } from "@/types";
 import { Edit2, Trash2 } from "lucide-react";
-import { renderIcon } from "../utils/iconRenderer";
-import Card from "./ui/Card";
+import { renderIcon } from "../../pages/newtab/utils/iconRenderer";
+import Card from "../../pages/newtab/components/ui/Card";
 import BoardTitle from "./BoardTitle";
 import BoardHeader from "./BoardHeader";
-import AddLink from "./AddLink";
+import AddLink from "../../pages/newtab/components/AddLink";
 
 interface LinkBoardProps {
   title: string;
   icon: ReactNode;
   links: Link[];
-  sectionName: SectionType;
-  onAddLink: (section: SectionType) => void;
-  onEditLink: (section: SectionType, link: Link) => void;
-  onDeleteLink: (section: SectionType, linkId: string) => void;
+  sectionName: Section;
+  onAddLink: (section: Section) => void;
+  onEditLink: (section: Section, link: Link) => void;
+  onDeleteLink: (section: Section, linkId: string) => void;
 }
 
 export const LinkBoard: React.FC<LinkBoardProps> = ({

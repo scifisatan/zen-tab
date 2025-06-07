@@ -1,4 +1,4 @@
-import { Task } from "@src/types";
+import { Task } from "@/types";
 import TaskItem from "@pages/newtab/components/TaskItem";
 
 export default function TaskList({ tasks }: { tasks: Task[] }) {

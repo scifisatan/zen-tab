@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SectionType, Link } from "../types";
+import { SectionType, Link } from "@/types";
 
 export const useModal = () => {
   const [showModal, setShowModal] = useState(false);

@@ -1,8 +1,8 @@
-import { gruvboxColors } from "@src/data";
-import { Task } from "@src/types";
-import { getStatusClass } from "@src/pages/newtab/utils/utils";
+// import { gruvboxColors } from "@/data";
+import { JiraTask } from "@/types";
+import { getStatusClass } from "@/pages/newtab/utils/utils";
 
-export default function TaskItem({ task }: { task: Task }) {
+export default function TaskItem({ task }: { task: JiraTask }) {
   return (
     <>
       <a
@@ -18,7 +18,7 @@ export default function TaskItem({ task }: { task: Task }) {
         ></div>
         <div className="min-w-0 flex-1">
           <div className="text-gruvbox-fg mb-2 text-lg font-bold">
-            {task.title}
+            {task.summary}
           </div>
           <div className="flex items-center gap-3 text-xs opacity-80">
             <span className="bg-gruvbox-bg3 rounded-sm px-2 py-1 font-mono text-xs">
@@ -34,7 +34,7 @@ export default function TaskItem({ task }: { task: Task }) {
           </div>
         </div>
       </a>
-      <style jsx>{`
+      {/* <style jsx>{`
         .status-todo {
           background: ${gruvboxColors.gray}4d;
         }
@@ -50,7 +50,7 @@ export default function TaskItem({ task }: { task: Task }) {
         .status-default {
           background: ${gruvboxColors.gray}4d;
         }
-      `}</style>
+      `}</style> */}
     </>
   );
 }

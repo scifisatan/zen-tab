@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "@src/types";
+import { Link } from "@/types";
 
 interface AddLinkModalProps {
   showModal: boolean;

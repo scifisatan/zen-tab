@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import { useGeneralConfig } from "@/hooks/useGeneralConfig";
+import { formatMessage as formatMsg, formatCurrentTime } from "@/lib/format";
 
 export const useTime = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [greeting, setGreeting] = useState("");
+  const { generalConfig } = useGeneralConfig();
 
   useEffect(() => {
     const updateTime = () => {
@@ -24,17 +27,10 @@ export const useTime = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const formatTime = (date: Date) => {
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    return date.toLocaleDateString("en-US", options);
-  };
+  function formatMessage(currentTime: Date) {
+    const result = formatMsg(currentTime, generalConfig);
+    return result;
+  }
 
-  return { currentTime, greeting, formatTime };
+  return { currentTime, greeting, formatMessage, formatCurrentTime };
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { QuickAccessSection } from "./QuickAccessSection";
 import { TasksSection } from "./TasksSection";
-import { Link, SectionType, Task } from "@src/types";
+import { Link, SectionType, Task } from "@/types";
 
 interface DashboardContentProps {
   workLinks: Link[];

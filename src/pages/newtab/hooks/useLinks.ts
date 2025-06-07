@@ -1,10 +1,5 @@
-import { useStorage } from "../../../hooks/useStorage";
-import { Link, SectionType } from "@src/types";
-import {
-  defaultWorkLinks,
-  defaultSocialLinks,
-  defaultToolsLinks,
-} from "@src/data";
+import { useStorage } from "@/hooks/useStorage";
+import { Link, SectionType } from "@/types";
 
 export const useLinks = () => {
   const [workLinks, setWorkLinks] = useStorage<Link[]>(

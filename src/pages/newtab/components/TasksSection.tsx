@@ -1,9 +1,9 @@
 import React from "react";
 import { CheckCircle } from "lucide-react";
-import SectionTitle from "./SectionTitle";
+import SectionTitle from "../../../components/section/SectionTitle";
 import Card from "./ui/Card";
-import BoardTitle from "./BoardTitle";
-import BoardHeader from "./BoardHeader";
+import BoardTitle from "../../../components/board/BoardTitle";
+import BoardHeader from "../../../components/board/BoardHeader";
 import { useTasks } from "../hooks/useTasks";
 import TaskList from "./TaskList";
 

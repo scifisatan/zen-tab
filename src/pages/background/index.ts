@@ -1,9 +1,9 @@
-import { Task, JiraConfig } from "@src/types";
+import { Task, JiraConfig } from "@/types";
 
 console.log("background script loaded");
 
-import { getMyJiraTasks } from "@src/api";
-import { readStorage } from "@src/hooks/useStorage";
+import { getMyJiraTasks } from "@//api";
+import { readStorage } from "@/hooks/useStorage";
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "getJiraTasks") {

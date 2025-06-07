@@ -1,4 +1,4 @@
-import { JiraConfig, Task } from "@src/types";
+import { JiraConfig, Task } from "@/types";
 
 export async function getMyJiraTasks(config: JiraConfig) {
   // Ensure domain has proper format for API calls

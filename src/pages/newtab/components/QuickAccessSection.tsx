@@ -1,8 +1,8 @@
 import React from "react";
 import { Briefcase, Users, Wrench } from "lucide-react";
-import { LinkBoard } from "./LinkBoard";
+import { LinkBoard } from "../../../components/board/LinkBoard";
 import { Link, SectionType } from "../types";
-import SectionTitle from "./SectionTitle";
+import SectionTitle from "../../../components/section/SectionTitle";
 
 interface QuickAccessSectionProps {
   className: string;

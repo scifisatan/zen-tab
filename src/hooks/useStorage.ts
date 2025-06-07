@@ -9,6 +9,9 @@ import {
 
 export type StorageArea = "sync" | "local";
 
+// custom hook to set chrome local/sync storage
+// should also set a listener on this specific key
+
 type SetValue<T> = Dispatch<SetStateAction<T>>;
 
 /**
@@ -22,50 +25,39 @@ export function useStorage<T>(
   const [storedValue, setStoredValue] = useState<T>(initialValue);
 
   useEffect(() => {
-    // Check if chrome.storage is available
-    if (typeof chrome !== "undefined" && chrome.storage) {
-      readStorage<T>(key, area).then((res) => {
-        if (res) setStoredValue(res);
-      });
-
-      chrome.storage.onChanged.addListener((changes, namespace) => {
-        if (namespace === area && changes.hasOwnProperty(key)) {
-          if (changes[key].newValue) setStoredValue(changes[key].newValue);
-        }
-      });
-    } else {
-      // Fallback to localStorage for development/testing
-      try {
-        const item = localStorage.getItem(key);
-        if (item) {
-          setStoredValue(JSON.parse(item));
-        }
-      } catch (error) {
-        console.warn(`Error reading localStorage key "${key}":`, error);
+    readStorage<T>(key, area).then((res) => {
+      if (res !== undefined && res !== null) {
+        // Key exists in storage, use the stored value
+        setStoredValue(res);
+      } else {
+        // Key doesn't exist, store the initial value first
+        setStorage<T>(key, initialValue, area).then((success) => {
+          if (success) {
+            setStoredValue(initialValue);
+          }
+        });
       }
-    }
-  }, []);
+    });
 
-  const setValueRef = useRef<SetValue<T>>(undefined);
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+      if (namespace === area && changes.hasOwnProperty(key)) {
+        if (changes[key].newValue !== undefined) {
+          setStoredValue(changes[key].newValue);
+        }
+      }
+    });
+  }, [key, area, initialValue]);
+
+  const setValueRef = useRef<SetValue<T>>(() => {})!;
 
   setValueRef.current = (value) => {
     // Allow value to be a function, so we have the same API as useState
     const newValue = value instanceof Function ? value(storedValue) : value;
     // Save to storage
     setStoredValue((prevState) => {
-      if (typeof chrome !== "undefined" && chrome.storage) {
-        setStorage<T>(key, newValue, area).then((success) => {
-          if (!success) setStoredValue(prevState);
-        });
-      } else {
-        // Fallback to localStorage for development/testing
-        try {
-          localStorage.setItem(key, JSON.stringify(newValue));
-        } catch (error) {
-          console.warn(`Error setting localStorage key "${key}":`, error);
-          setStoredValue(prevState);
-        }
-      }
+      setStorage<T>(key, newValue, area).then((success) => {
+        if (!success) setStoredValue(prevState);
+      });
 
       return newValue;
     });
@@ -92,16 +84,8 @@ export async function readStorage<T>(
   area: StorageArea = "local",
 ): Promise<T | undefined> {
   try {
-    // Check if chrome.storage is available
-    if (typeof chrome !== "undefined" && chrome.storage) {
-      const result = await chrome.storage[area].get(key);
-      console.log("retrieved from chrome storage", result);
-      return result?.[key];
-    } else {
-      // Fallback to localStorage for development/testing
-      const item = localStorage.getItem(key);
-      return item ? JSON.parse(item) : undefined;
-    }
+    const result = await chrome.storage[area].get(key);
+    return result?.[key];
   } catch (error) {
     console.warn(`Error reading ${area} storage key "${key}":`, error);
     return undefined;
@@ -121,14 +105,8 @@ export async function setStorage<T>(
   area: StorageArea = "local",
 ): Promise<boolean> {
   try {
-    // Check if chrome.storage is available
-    if (typeof chrome !== "undefined" && chrome.storage) {
-      return true;
-    } else {
-      // Fallback to localStorage for development/testing
-      localStorage.setItem(key, JSON.stringify(value));
-      return true;
-    }
+    await chrome.storage[area].set({ [key]: value });
+    return true;
   } catch (error) {
     console.warn(`Error setting ${area} storage key "${key}":`, error);
     return false;
