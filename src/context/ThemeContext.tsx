@@ -1,10 +1,4 @@
-import { useTheme as useSimpleTheme, Theme } from "@/hooks/useTheme";
-import { createContext, useContext, useEffect } from "react";
-
-type ThemeProviderProps = {
-  children: React.ReactNode;
-  defaultTheme?: Theme;
-import { useStorage } from "@/hooks/useStorage";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export type CustomTheme = {
@@ -78,15 +72,25 @@ const gruvboxTheme: CustomTheme = {
     --border: oklch(0.35 0.02 85);
     --input: oklch(0.25 0.02 85);
     --ring: oklch(0.65 0.15 75);
-  }`
+  }`,
 };
 
+// Query keys
+const SELECTED_THEME_KEY = "selectedTheme";
+const APPEARANCE_MODE_KEY = "appearanceMode";
+const CUSTOM_THEMES_KEY = "customThemes";
+
+// Default values
+const DEFAULT_SELECTED_THEME = "gruvbox";
+const DEFAULT_APPEARANCE_MODE: AppearanceMode = "system";
+const DEFAULT_CUSTOM_THEMES: CustomTheme[] = [];
+
 const initialState: ThemeProviderState = {
-  selectedTheme: "gruvbox",
+  selectedTheme: DEFAULT_SELECTED_THEME,
   setSelectedTheme: () => null,
-  appearanceMode: "system",
+  appearanceMode: DEFAULT_APPEARANCE_MODE,
   setAppearanceMode: () => null,
-  customThemes: [],
+  customThemes: DEFAULT_CUSTOM_THEMES,
   addCustomTheme: () => null,
   removeCustomTheme: () => null,
   updateCustomTheme: () => null,
@@ -97,51 +101,120 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({
   children,
-  defaultTheme = "system",
+  defaultTheme = DEFAULT_SELECTED_THEME,
+  defaultMode = DEFAULT_APPEARANCE_MODE,
   ...props
 }: ThemeProviderProps) {
-  const { theme, setTheme: updateTheme } = useSimpleTheme();
-
-  // Use the theme from cache or default
-  const currentTheme = theme || defaultTheme;
-  defaultTheme = "gruvbox",
-  defaultMode = "system",
-  storageKey = "zen_tab_theme",
-  ...props
-}: ThemeProviderProps) {
-  const { selectedTheme, setSelectedTheme: updateTheme } = useSimpleTheme();
-
-  // Use the theme from cache or default
-  const currentTheme = theme || defaultTheme;
-  const [appearanceMode, setAppearanceMode] = useStorage<AppearanceMode>(
-    "zen_tab_appearance_mode",
-    defaultMode
-  );
-  const [customThemes, setCustomThemes] = useStorage<CustomTheme[]>(
-    "zen_tab_custom_themes",
-    []
-  );
+  const queryClient = useQueryClient();
   const [currentTheme, setCurrentTheme] = useState<string>("system");
+
+  // Selected theme query
+  const { data: selectedTheme = defaultTheme } = useQuery({
+    queryKey: [SELECTED_THEME_KEY],
+    queryFn: () => defaultTheme,
+  });
+
+  // Appearance mode query
+  const { data: appearanceMode = defaultMode } = useQuery({
+    queryKey: [APPEARANCE_MODE_KEY],
+    queryFn: () => defaultMode,
+  });
+
+  // Custom themes query
+  const { data: customThemes = DEFAULT_CUSTOM_THEMES } = useQuery({
+    queryKey: [CUSTOM_THEMES_KEY],
+    queryFn: () => DEFAULT_CUSTOM_THEMES,
+  });
 
   // Get all available themes (built-in + custom)
   const allThemes = [gruvboxTheme, ...customThemes];
+
+  const setSelectedTheme = (theme: string) => {
+    queryClient.setQueryData([SELECTED_THEME_KEY], theme);
+  };
+
+  const setAppearanceMode = (mode: AppearanceMode) => {
+    queryClient.setQueryData([APPEARANCE_MODE_KEY], mode);
+  };
+
+  const addCustomTheme = (newTheme: CustomTheme) => {
+    const current =
+      queryClient.getQueryData<CustomTheme[]>([CUSTOM_THEMES_KEY]) || [];
+    queryClient.setQueryData([CUSTOM_THEMES_KEY], [...current, newTheme]);
+  };
+
+  const removeCustomTheme = (id: string) => {
+    const current =
+      queryClient.getQueryData<CustomTheme[]>([CUSTOM_THEMES_KEY]) || [];
+    queryClient.setQueryData(
+      [CUSTOM_THEMES_KEY],
+      current.filter((t) => t.id !== id),
+    );
+
+    // If the removed theme was selected, switch to gruvbox
+    if (selectedTheme === id) {
+      setSelectedTheme("gruvbox");
+    }
+  };
+
+  const updateCustomTheme = (updatedTheme: CustomTheme) => {
+    const current =
+      queryClient.getQueryData<CustomTheme[]>([CUSTOM_THEMES_KEY]) || [];
+    queryClient.setQueryData(
+      [CUSTOM_THEMES_KEY],
+      current.map((t) => (t.id === updatedTheme.id ? updatedTheme : t)),
+    );
+  };
 
   const applyTheme = (theme: CustomTheme, isDark: boolean) => {
     const root = window.document.documentElement;
 
     // Reset custom styles first
     const customProps = [
-      "--background", "--foreground", "--card", "--card-foreground",
-      "--popover", "--popover-foreground", "--primary", "--primary-foreground",
-      "--secondary", "--secondary-foreground", "--muted", "--muted-foreground",
-      "--accent", "--accent-foreground", "--destructive", "--destructive-foreground",
-      "--border", "--input", "--ring", "--chart-1", "--chart-2", "--chart-3",
-      "--chart-4", "--chart-5", "--sidebar", "--sidebar-foreground",
-      "--sidebar-primary", "--sidebar-primary-foreground", "--sidebar-accent",
-      "--sidebar-accent-foreground", "--sidebar-border", "--sidebar-ring",
-      "--font-sans", "--font-serif", "--font-mono", "--radius",
-      "--shadow-2xs", "--shadow-xs", "--shadow-sm", "--shadow",
-      "--shadow-md", "--shadow-lg", "--shadow-xl", "--shadow-2xl",
+      "--background",
+      "--foreground",
+      "--card",
+      "--card-foreground",
+      "--popover",
+      "--popover-foreground",
+      "--primary",
+      "--primary-foreground",
+      "--secondary",
+      "--secondary-foreground",
+      "--muted",
+      "--muted-foreground",
+      "--accent",
+      "--accent-foreground",
+      "--destructive",
+      "--destructive-foreground",
+      "--border",
+      "--input",
+      "--ring",
+      "--chart-1",
+      "--chart-2",
+      "--chart-3",
+      "--chart-4",
+      "--chart-5",
+      "--sidebar",
+      "--sidebar-foreground",
+      "--sidebar-primary",
+      "--sidebar-primary-foreground",
+      "--sidebar-accent",
+      "--sidebar-accent-foreground",
+      "--sidebar-border",
+      "--sidebar-ring",
+      "--font-sans",
+      "--font-serif",
+      "--font-mono",
+      "--radius",
+      "--shadow-2xs",
+      "--shadow-xs",
+      "--shadow-sm",
+      "--shadow",
+      "--shadow-md",
+      "--shadow-lg",
+      "--shadow-xl",
+      "--shadow-2xl",
     ];
 
     customProps.forEach((prop) => {
@@ -200,15 +273,10 @@ export function ThemeProvider({
 
   useEffect(() => {
     const root = window.document.documentElement;
-    
+
     // Remove all theme classes
     root.classList.remove("light", "dark");
 
-    if (currentTheme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: light)")
-        .matches
-        ? "dark"
-        : "light";
     // Find the selected theme
     const theme = allThemes.find((t) => t.id === selectedTheme) || gruvboxTheme;
 
@@ -222,14 +290,6 @@ export function ThemeProvider({
       isDark = appearanceMode === "dark";
     }
 
-    root.classList.add(currentTheme);
-  }, [currentTheme]);
-
-  const value = {
-    theme: currentTheme,
-    setTheme: (newTheme: Theme) => {
-      updateTheme(newTheme);
-    },
     // Set the current theme for state tracking
     setCurrentTheme(appliedMode);
 
@@ -246,7 +306,8 @@ export function ThemeProvider({
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (e: MediaQueryListEvent) => {
-      const theme = allThemes.find((t) => t.id === selectedTheme) || gruvboxTheme;
+      const theme =
+        allThemes.find((t) => t.id === selectedTheme) || gruvboxTheme;
       applyTheme(theme, e.matches);
       setCurrentTheme(e.matches ? "dark" : "light");
     };
@@ -254,23 +315,6 @@ export function ThemeProvider({
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, [selectedTheme, appearanceMode, customThemes]);
-
-  const addCustomTheme = (newTheme: CustomTheme) => {
-    setCustomThemes((prev) => [...prev, newTheme]);
-  };
-
-  const removeCustomTheme = (id: string) => {
-    setCustomThemes((prev) => prev.filter((t) => t.id !== id));
-    if (selectedTheme === id) {
-      setSelectedTheme("gruvbox");
-    }
-  };
-
-  const updateCustomTheme = (updatedTheme: CustomTheme) => {
-    setCustomThemes((prev) =>
-      prev.map((t) => (t.id === updatedTheme.id ? updatedTheme : t))
-    );
-  };
 
   const value = {
     selectedTheme,
@@ -290,3 +334,12 @@ export function ThemeProvider({
     </ThemeProviderContext.Provider>
   );
 }
+
+export const useTheme = () => {
+  const context = useContext(ThemeProviderContext);
+
+  if (context === undefined)
+    throw new Error("useTheme must be used within a ThemeProvider");
+
+  return context;
+};
