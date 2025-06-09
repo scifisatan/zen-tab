@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGeneralConfig } from "@/hooks/useGeneralConfig";
 import { GeneralConfig } from "@/types/general";
-import { AppearanceSettings } from "./appearance";
-import { WeekendSettings } from "./weekend";
-import { OfficeHoursSettings } from "./office-hours";
-import { CustomMessagesSettings } from "./custom-messages";
-import { SettingsHeader } from "../SettingsFormHeader";
+import React, { useEffect, useState } from "react";
 import { SaveButton } from "../SaveButton";
+import { SettingsHeader } from "../SettingsFormHeader";
+import { AppearanceSettings } from "./appearance";
+import { CustomMessagesSettings } from "./custom-messages";
+import { OfficeHoursSettings } from "./office-hours";
+import { WeekendSettings } from "./weekend";
 
 interface SettingSection {
   title: string;
@@ -100,7 +100,7 @@ export const GeneralSettings: React.FC = () => {
 
       {/* Save Button */}
       <SaveButton onClick={handleSave} disabled={!hasChanges}>
-        Save Settings
+        Save
       </SaveButton>
     </div>
   );

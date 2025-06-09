@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useDashboardConfig } from "@/hooks/useDashboardConfig";
-import { SettingsHeader } from "../SettingsFormHeader";
+import React, { useEffect, useState } from "react";
 import { SaveButton } from "../SaveButton";
+import { SettingsHeader } from "../SettingsFormHeader";
 
 export const DashboardSettings: React.FC = () => {
   const { dashboardConfig, setDashboardConfig } = useDashboardConfig();
@@ -71,7 +71,7 @@ export const DashboardSettings: React.FC = () => {
         )}
       </div>
       <SaveButton onClick={handleSave} disabled={!hasChanges}>
-        Save Dashboard Config
+        Save
       </SaveButton>
     </>
   );

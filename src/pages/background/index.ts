@@ -1,4 +1,4 @@
-import { JiraTask, JiraConfig } from "@/types";
+import { JiraConfig } from "@/types";
 
 import { getMyJiraTasks } from "@/api";
 import { readStorage } from "@/hooks/useStorage";
@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const config = await readStorage<JiraConfig>("zen_tab_jira_config");
 
         if (!config) {
-          throw new Error("Jira configuration is null or undefined");
+          throw new Error("Jira isn't configured yet. Please set up your Jira configuration first.");
         }
 
         const tasks = await getMyJiraTasks(config, request.jqlQuery || "");

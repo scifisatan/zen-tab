@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import { useJiraConfig } from "@/hooks/useJiraConfig";
 import { JiraConfig } from "@/types/jira";
-import { SettingsHeader } from "../SettingsFormHeader";
-import { Card, CardContent } from "@/components/ui/card";
+import React, { useEffect, useState } from "react";
 import { SaveButton } from "../SaveButton";
+import { SettingsHeader } from "../SettingsFormHeader";
 import { JiraInputField } from "./JiraInputField";
 
 const jiraFields = [
@@ -91,7 +91,7 @@ export const JiraSettings: React.FC = () => {
 
       {/* Save Button */}
       <SaveButton onClick={handleSave} disabled={!hasChanges}>
-        Save Settings
+        Save
       </SaveButton>
     </div>
   );

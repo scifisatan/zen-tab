@@ -1,6 +1,6 @@
 import { Save } from "lucide-react";
-import { Button } from "../ui/button";
 import { ReactNode } from "react";
+import { Button } from "../ui/button";
 
 export const SaveButton: React.FC<{
   onClick: () => void;
@@ -12,9 +12,9 @@ export const SaveButton: React.FC<{
       <Button
         onClick={onClick}
         disabled={disabled}
-        className="disabled:cursor-not-allowed disabled:opacity-50"
+        className="disabled:not-allowed disabled:opacity-50"
       >
-        <Save className="mr-2 h-4 w-4" />
+        <Save className="mr-1 h-4 w-4" />
         {children}
       </Button>
     </div>
