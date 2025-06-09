@@ -11,6 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import GeneralSettings from "./general";
 import JiraSettings from "./jira";
 import DashboardSettings from "./dashboard";
+import ThemeSettings from "./themes";
 
 interface SettingsDialogProps {
   isOpen: boolean;
@@ -25,7 +26,7 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="flex h-[80vh] min-w-lg flex-col overflow-hidden">
+      <DialogContent className="flex h-[80vh] min-w-3xl flex-col overflow-hidden">
         <DialogHeader className="mx-auto flex-shrink-0 py-2">
           <DialogTitle className="text-3xl">Zen Tab Settings</DialogTitle>
         </DialogHeader>
@@ -34,14 +35,17 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({
           onValueChange={setActiveTab}
           className="flex min-h-0 flex-1 flex-col"
         >
-          <TabsList className="m-2 mx-auto flex-shrink-0">
-            <TabsTrigger className="text-xl" value="general">
+          <TabsList className="m-2 w-full flex-shrink-0">
+            <TabsTrigger className="p-4 py-6 text-xl" value="general">
               General
             </TabsTrigger>
-            <TabsTrigger className="text-xl" value="jira">
+            <TabsTrigger className="p-4 py-6 text-xl" value="themes">
+              Themes
+            </TabsTrigger>
+            <TabsTrigger className="p-4 py-6 text-xl" value="jira">
               Jira
             </TabsTrigger>
-            <TabsTrigger className="text-xl" value="dashboard">
+            <TabsTrigger className="p-4 py-6 text-xl" value="dashboard">
               Dashboard
             </TabsTrigger>
           </TabsList>
@@ -53,6 +57,13 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({
                 className="h-auto min-h-full space-y-4 p-2"
               >
                 <GeneralSettings />
+              </TabsContent>
+
+              <TabsContent
+                value="themes"
+                className="h-auto min-h-full space-y-4 p-2"
+              >
+                <ThemeSettings />
               </TabsContent>
 
               <TabsContent

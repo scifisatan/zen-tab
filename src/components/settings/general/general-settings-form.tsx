@@ -4,7 +4,6 @@ import { GeneralConfig } from "@/types/general";
 import React, { useEffect, useState } from "react";
 import { SaveButton } from "../SaveButton";
 import { SettingsHeader } from "../SettingsFormHeader";
-import { AppearanceSettings } from "./appearance";
 import { CustomMessagesSettings } from "./custom-messages";
 import { OfficeHoursSettings } from "./office-hours";
 import { WeekendSettings } from "./weekend";
@@ -19,11 +18,6 @@ interface SettingSection {
 }
 
 const SETTINGS_SECTIONS: SettingSection[] = [
-  {
-    title: "Appearance",
-    description: "Customize the visual theme of your dashboard",
-    component: AppearanceSettings,
-  },
   {
     title: "Weekend Days",
     description:
