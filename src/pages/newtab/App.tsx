@@ -10,12 +10,11 @@ const queryclient = new QueryClient();
 
 const App = () => {
   const [isSettingsDialogVisible, setIsSettingsDialogVisible] = useState(false);
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Handle 'S' key to toggle settings dialog
+      // Handle 'S' key to open settings dialog
       if (event.key.toLowerCase() === 's') {
-        setIsSettingsDialogVisible(prev => !prev);
+        setIsSettingsDialogVisible(true);
       }
       // Handle 'Esc' key to close settings dialog when open
       else if (event.key === 'Escape' && isSettingsDialogVisible) {
