@@ -1,22 +1,11 @@
-<<<<<<< Updated upstream
-import { getJiraTasksFromBackground } from "@/api";
-import { Button } from "@/components/ui/button";
-=======
-import React from "react";
 import { JiraTask as JiraTaskType } from "@/types/jira";
 import JiraTask from "./JiraTask";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, AlertCircle } from "lucide-react";
 import { useJiraTasks } from "@/hooks/useJiraTasks";
->>>>>>> Stashed changes
 import { useJiraConfig } from "@/hooks/useJiraConfig";
-import { useStorage } from "@/hooks/useStorage";
-import { JiraTask as JiraTaskType } from "@/types/jira";
-import { useQuery } from "@tanstack/react-query";
-import { AlertCircle, RefreshCw } from "lucide-react";
 import React from "react";
 import { Card, CardContent } from "../ui/card";
-import JiraTask from "./JiraTask";
 
 interface JiraTasksListProps {
   jqlQuery: string;
@@ -70,29 +59,20 @@ const JiraTasksList: React.FC<JiraTasksListProps> = ({ jqlQuery }) => {
         </div>
       </div>
 
-<<<<<<< Updated upstream
       {!jiraConfig ? (
-
-<Card>
-  <CardContent>
-
-          <div className="rounded-md border border-yellow-200 bg-yellow-50 p-3">
-=======
-      {!jiraConfig && !configLoading ? (
-        <div className="rounded-md border border-yellow-200 bg-yellow-50 p-3">
->>>>>>> Stashed changes
-          <p className="text-sm text-yellow-800">
-            Jira configuration incomplete. Please configure your Jira settings
-            in the extension settings.
-          </p>
-        </div>
-  </CardContent>
-</Card>
+        <Card>
+          <CardContent>
+            <div className="rounded-md border border-yellow-200 bg-yellow-50 p-3">
+              <p className="text-sm text-yellow-800">
+                Jira configuration incomplete. Please configure your Jira
+                settings in the extension settings.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       ) : isError ? (
-        <div className="rounded-md border  p-3">
-          <p className="text-sm">
-            {error?.message || "Failed to fetch tasks"}
-          </p>
+        <div className="rounded-md border p-3">
+          <p className="text-sm">{error?.message || "Failed to fetch tasks"}</p>
         </div>
       ) : (
         <div className="space-y-1">

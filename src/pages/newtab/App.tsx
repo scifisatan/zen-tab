@@ -1,21 +1,9 @@
-<<<<<<< Updated upstream
-import Dashboard from "@/components/Dashboard";
-import { Header } from "@/components/DashboardHeader";
-import { MainLayout } from "@/components/MainLayout";
-import SettingsDialog, { SettingsDialogToggle } from "@/components/settings";
-import { ThemeProvider } from "@/context/ThemeContext";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
-const queryclient = new QueryClient();
-=======
-import { useState } from "react";
-
 import { MainLayout } from "@/components/MainLayout";
 import { Header } from "@/components/DashboardHeader";
 import SettingsDialog, { SettingsDialogToggle } from "@/components/settings";
 import Dashboard from "@/components/Dashboard";
->>>>>>> Stashed changes
 
 const App = () => {
   const [isSettingsDialogVisible, setIsSettingsDialogVisible] = useState(false);

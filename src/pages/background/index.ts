@@ -1,8 +1,3 @@
-<<<<<<< Updated upstream
-import { JiraConfig } from "@/types";
-
-=======
->>>>>>> Stashed changes
 import { getMyJiraTasks } from "@/api";
 import { asyncStorage } from "@/services/storage/async-storage";
 import { defaultJiraConfig } from "@/config/jira.config";
@@ -45,13 +40,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         // Check if the Jira config key actually exists in storage
         const config = await getJiraConfigFromCache();
 
-<<<<<<< Updated upstream
         if (!config) {
-          throw new Error("Jira isn't configured yet. Please set up your Jira configuration first.");
-=======
-        if (!config || !config.domain || !config.apiToken || !config.email) {
-          throw new Error("Jira configuration is incomplete");
->>>>>>> Stashed changes
+          throw new Error(
+            "Jira isn't configured yet. Please set up your Jira configuration first.",
+          );
         }
 
         const tasks = await getMyJiraTasks(config, request.jqlQuery || "");
