@@ -10,7 +10,7 @@ export function SectionRow({
   setDashboardConfig: Dispatch<SetStateAction<DashboardConfig>>;
 }) {
   return (
-    <div className="flex flex-1 flex-nowrap gap-8 overflow-x-auto sm:flex-wrap">
+    <div className="flex flex-1 flex-wrap gap-8">
       {row.map((board) => (
         <Board
           key={board.id}

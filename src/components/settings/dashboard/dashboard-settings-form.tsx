@@ -35,7 +35,7 @@ export const DashboardSettings: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <>
       <SettingsHeader title="Dashboard Configuration" />
 
       <div className="space-y-4">
@@ -45,14 +45,14 @@ export const DashboardSettings: React.FC = () => {
         >
           Configuration JSON
         </Label>
-        <div className="w-full max-w-md overflow-hidden">
+        <div className="max-w-md overflow-hidden">
           <Textarea
             contentEditable
             id="dashboard-config-json"
             value={rawConfig}
             onChange={(e) => handleConfigChange(e.target.value)}
             placeholder="Enter your dashboard configuration..."
-            className="h-3/4 w-full resize-none font-mono text-sm"
+            className="h-[40vh] resize-none font-mono text-sm"
             style={{
               whiteSpace: "nowrap",
               overflowX: "auto",
@@ -73,6 +73,6 @@ export const DashboardSettings: React.FC = () => {
       <SaveButton onClick={handleSave} disabled={!hasChanges}>
         Save Dashboard Config
       </SaveButton>
-    </div>
+    </>
   );
 };

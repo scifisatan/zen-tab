@@ -61,8 +61,8 @@ export function Board({
   };
 
   return (
-    <div className="flex flex-1">
-      <Card className="w-full gap-2">
+    <>
+      <Card className="w-full flex-1 gap-2">
         <CardHeader className="flex justify-between">
           <BoardTitle title={board.title} />
           {board.type === "links" && (
@@ -99,6 +99,6 @@ export function Board({
         initialData={currentEditLink || undefined}
         title="Edit Link"
       />
-    </div>
+    </>
   );
 }

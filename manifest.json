@@ -2,8 +2,6 @@
   "manifest_version": 3,
   "name": "Zen Tab",
   "description": "New Tab to focus on work",
-  "license": "MIT",
-
   "chrome_url_overrides": {
     "newtab": "src/pages/newtab/index.html"
   },
