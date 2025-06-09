@@ -6,15 +6,18 @@ import { SaveButton } from "../SaveButton";
 import { SettingsHeader } from "../SettingsFormHeader";
 
 export const DashboardSettings: React.FC = () => {
-  const { dashboardConfig, setDashboardConfig } = useDashboardConfig();
+  const { dashboardConfig, setDashboardConfig, isLoading } =
+    useDashboardConfig();
   const [rawConfig, setRawConfig] = useState("");
   const [hasChanges, setHasChanges] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setRawConfig(JSON.stringify(dashboardConfig, null, 2));
-    setHasChanges(false);
-    setError(null);
+    if (dashboardConfig) {
+      setRawConfig(JSON.stringify(dashboardConfig, null, 2));
+      setHasChanges(false);
+      setError(null);
+    }
   }, [dashboardConfig]);
 
   const handleConfigChange = (value: string) => {
@@ -33,6 +36,22 @@ export const DashboardSettings: React.FC = () => {
       setError("Invalid JSON format. Please check your configuration.");
     }
   };
+
+  if (isLoading || !dashboardConfig) {
+    return (
+      <div className="space-y-4">
+        <SettingsHeader title="Dashboard Configuration" />
+        <div className="flex items-center justify-center py-8">
+          <div className="text-center">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+            <p className="text-muted-foreground mt-2 text-sm">
+              Loading settings...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

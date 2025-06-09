@@ -1,29 +1,43 @@
 import { JiraConfig } from "@/types/jira";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { defaultJiraConfig } from "@/config/jira.config";
-import { useStorage } from "@/hooks/useStorage";
 
-const JIRA_STORAGE_KEY = "zen_tab_jira_config";
+const JIRA_CONFIG_KEY = "jira_config";
 
 export const useJiraConfig = () => {
-  const [jiraConfig, setJiraConfig] = useStorage<JiraConfig>(
-    JIRA_STORAGE_KEY,
-    defaultJiraConfig,
-  );
+  const queryClient = useQueryClient();
 
-  const updateJiraConfig = (
-    domain: string,
-    apiToken: string,
-    email: string,
+  const {
+    data: jiraConfig = defaultJiraConfig,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [JIRA_CONFIG_KEY],
+    queryFn: () => defaultJiraConfig, // fallback if nothing is persisted
+  });
+
+  const setJiraConfig = (
+    config: JiraConfig | ((prev: JiraConfig) => JiraConfig),
   ) => {
-    setJiraConfig({
-      domain,
-      apiToken,
-      email,
-    });
+    let newConfig: JiraConfig;
+
+    if (typeof config === "function") {
+      const currentConfig =
+        queryClient.getQueryData<JiraConfig>([JIRA_CONFIG_KEY]) ||
+        defaultJiraConfig;
+      newConfig = config(currentConfig);
+    } else {
+      newConfig = config;
+    }
+
+    // TanStack Query with persistence handles storage automatically
+    queryClient.setQueryData([JIRA_CONFIG_KEY], newConfig);
   };
 
   return {
     jiraConfig,
-    updateJiraConfig,
+    setJiraConfig,
+    isLoading,
+    error,
   };
 };

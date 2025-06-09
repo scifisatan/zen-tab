@@ -43,33 +43,58 @@ const SETTINGS_SECTIONS: SettingSection[] = [
 ];
 
 export const GeneralSettings: React.FC = () => {
-  const { generalConfig, updateGeneralConfig } = useGeneralConfig();
-  const [formData, setFormData] = useState<GeneralConfig>(generalConfig);
+  const { generalConfig, updateGeneralConfig, isLoading } = useGeneralConfig();
+  const [formData, setFormData] = useState<GeneralConfig | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    setFormData(generalConfig);
-    setHasChanges(false);
+    if (generalConfig) {
+      setFormData(generalConfig);
+      setHasChanges(false);
+    }
   }, [generalConfig]);
 
   const updateFormData = (updater: (prev: GeneralConfig) => GeneralConfig) => {
-    setFormData(updater);
-    setHasChanges(true);
+    if (formData) {
+      setFormData(updater(formData));
+      setHasChanges(true);
+    }
   };
 
   const handleSave = () => {
-    const cleanedFormData = {
-      ...formData,
-      relaxingMessages: formData.relaxingMessages.filter(
-        (msg) => msg.trim() !== "",
-      ),
-      clockedOutMessages: formData.clockedOutMessages.filter(
-        (msg) => msg.trim() !== "",
-      ),
-    };
-    updateGeneralConfig(cleanedFormData);
-    setHasChanges(false);
+    if (formData) {
+      const cleanedFormData = {
+        ...formData,
+        relaxingMessages: formData.relaxingMessages.filter(
+          (msg) => msg.trim() !== "",
+        ),
+        clockedOutMessages: formData.clockedOutMessages.filter(
+          (msg) => msg.trim() !== "",
+        ),
+        weekendMessages: formData.weekendMessages.filter(
+          (msg) => msg.trim() !== "",
+        ),
+      };
+      updateGeneralConfig(cleanedFormData);
+      setHasChanges(false);
+    }
   };
+
+  if (isLoading || !formData) {
+    return (
+      <div className="space-y-6">
+        <SettingsHeader title="General Settings" />
+        <div className="flex items-center justify-center py-8">
+          <div className="text-center">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+            <p className="text-muted-foreground mt-2 text-sm">
+              Loading settings...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

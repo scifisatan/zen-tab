@@ -1,5 +1,14 @@
+<<<<<<< Updated upstream
 import { getJiraTasksFromBackground } from "@/api";
 import { Button } from "@/components/ui/button";
+=======
+import React from "react";
+import { JiraTask as JiraTaskType } from "@/types/jira";
+import JiraTask from "./JiraTask";
+import { Button } from "@/components/ui/button";
+import { RefreshCw, AlertCircle } from "lucide-react";
+import { useJiraTasks } from "@/hooks/useJiraTasks";
+>>>>>>> Stashed changes
 import { useJiraConfig } from "@/hooks/useJiraConfig";
 import { useStorage } from "@/hooks/useStorage";
 import { JiraTask as JiraTaskType } from "@/types/jira";
@@ -14,67 +23,34 @@ interface JiraTasksListProps {
 }
 
 const JiraTasksList: React.FC<JiraTasksListProps> = ({ jqlQuery }) => {
-  const { jiraConfig } = useJiraConfig();
-  const [jiraTasks, setJiraTasks] = useStorage<JiraTaskType[]>(
-    `jiraTasks_${jqlQuery}`,
-    [],
-  );
+  const { jiraConfig, isLoading: configLoading } = useJiraConfig();
 
   const {
-    data: fetchedTasks = [],
+    data: displayTasks,
     error,
     isLoading,
     isError,
     refetch,
     isFetching,
     dataUpdatedAt,
-  } = useQuery({
-    queryKey: ["jiraTasks", jqlQuery, jiraConfig.domain],
-    queryFn: () => getJiraTasksFromBackground(jqlQuery),
-    enabled:
-      !!jqlQuery &&
-      !!jiraConfig.apiToken &&
-      !!jiraConfig.domain &&
-      !!jiraConfig.email,
-    refetchInterval: 5 * 60 * 1000, // 5 minutes
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
-    retry: (failureCount, error) => {
-      // Don't retry on auth errors or config errors
-      if (
-        error?.message?.includes("401") ||
-        error?.message?.includes("403") ||
-        error?.message?.includes("configuration")
-      ) {
-        return false;
-      }
-      return failureCount < 3;
-    },
-    refetchOnWindowFocus: false,
-  });
+  } = useJiraTasks(jqlQuery);
 
-  React.useEffect(() => {
-    if (fetchedTasks.length > 0) {
-      setJiraTasks(fetchedTasks);
-    }
-  }, [fetchedTasks, setJiraTasks]);
-
-  const displayTasks = fetchedTasks.length > 0 ? fetchedTasks : jiraTasks;
   const isRefreshing = isFetching && !isLoading;
+  const isLoadingState = configLoading || isLoading;
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm">
-            {isLoading
+            {isLoadingState
               ? "Loading..."
               : `${displayTasks.length} task${displayTasks.length !== 1 ? "s" : ""}`}
           </span>
           {isError && <AlertCircle size={14} className="text-red-500" />}
         </div>
         <div className="flex items-center gap-2">
-          {dataUpdatedAt && !isLoading && (
+          {dataUpdatedAt && !isLoadingState && (
             <span className="text-muted-foreground text-xs">
               Updated {new Date(dataUpdatedAt).toLocaleTimeString()}
             </span>
@@ -83,7 +59,7 @@ const JiraTasksList: React.FC<JiraTasksListProps> = ({ jqlQuery }) => {
             variant="outline"
             size="sm"
             onClick={() => refetch()}
-            disabled={isFetching}
+            disabled={isFetching || configLoading}
           >
             <RefreshCw
               size={16}
@@ -94,12 +70,17 @@ const JiraTasksList: React.FC<JiraTasksListProps> = ({ jqlQuery }) => {
         </div>
       </div>
 
+<<<<<<< Updated upstream
       {!jiraConfig ? (
 
 <Card>
   <CardContent>
 
           <div className="rounded-md border border-yellow-200 bg-yellow-50 p-3">
+=======
+      {!jiraConfig && !configLoading ? (
+        <div className="rounded-md border border-yellow-200 bg-yellow-50 p-3">
+>>>>>>> Stashed changes
           <p className="text-sm text-yellow-800">
             Jira configuration incomplete. Please configure your Jira settings
             in the extension settings.
@@ -115,10 +96,10 @@ const JiraTasksList: React.FC<JiraTasksListProps> = ({ jqlQuery }) => {
         </div>
       ) : (
         <div className="space-y-1">
-          {displayTasks.map((task) => (
+          {displayTasks.map((task: JiraTaskType) => (
             <JiraTask key={task.key} task={task} />
           ))}
-          {!isLoading && displayTasks.length === 0 && (
+          {!isLoadingState && displayTasks.length === 0 && (
             <p className="text-muted-foreground py-4 text-center text-sm">
               No tasks found
             </p>

@@ -1,13 +1,13 @@
 import { GeneralConfig } from "@/types";
-import { time24hToDate } from "@/lib/time";
+import { time24hrToDate } from "@/lib/time";
 
 // TODO: Separate this more
 export const formatMessage = (date: Date, config: GeneralConfig) => {
   const now = new Date(date);
   const currentHour = now.getHours();
 
-  const clockInTime = time24hToDate(config.timeConfig.clockInTime);
-  const clockOutTime = time24hToDate(config.timeConfig.clockOutTime);
+  const clockInTime = time24hrToDate(config.timeConfig.clockInTime);
+  const clockOutTime = time24hrToDate(config.timeConfig.clockOutTime);
 
   // Check if it's before clock-in time (non-office hours)
   if (currentHour < clockInTime.getHours()) {

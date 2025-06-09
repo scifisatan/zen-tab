@@ -27,7 +27,7 @@ const LinkItem: React.FC<LinkItemProps> = ({
         className="flex flex-grow items-center gap-3 transition-colors"
       >
         <IconComponent className="text-lg" />
-        <span className="text-lg">{link.name}</span>
+        <span className="text-lg font-medium">{link.name}</span>
       </a>
 
       {isEditable && (

@@ -1,12 +1,9 @@
-import { useStorage } from "@/hooks/useStorage";
-import { createContext, useContext, useEffect, useState } from "react";
-
-type Theme = "dark" | "light" | "system";
+import { useTheme as useSimpleTheme, Theme } from "@/hooks/useTheme";
+import { createContext, useContext, useEffect } from "react";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
   defaultTheme?: Theme;
-  storageKey?: string;
 };
 
 type ThemeProviderState = {
@@ -24,18 +21,20 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  storageKey = "zen_tab_theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useStorage(storageKey, defaultTheme);
+  const { theme, setTheme: updateTheme } = useSimpleTheme();
+
+  // Use the theme from cache or default
+  const currentTheme = theme || defaultTheme;
 
   useEffect(() => {
     const root = window.document.documentElement;
 
     root.classList.remove("light", "dark");
 
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+    if (currentTheme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: light)")
         .matches
         ? "dark"
         : "light";
@@ -44,13 +43,13 @@ export function ThemeProvider({
       return;
     }
 
-    root.classList.add(theme);
-  }, [theme]);
+    root.classList.add(currentTheme);
+  }, [currentTheme]);
 
   const value = {
-    theme,
-    setTheme: (theme: Theme) => {
-      setTheme(theme);
+    theme: currentTheme,
+    setTheme: (newTheme: Theme) => {
+      updateTheme(newTheme);
     },
   };
 

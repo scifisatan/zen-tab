@@ -1,25 +1,40 @@
+<<<<<<< Updated upstream
 import { JiraConfig } from "@/types";
 
+=======
+>>>>>>> Stashed changes
 import { getMyJiraTasks } from "@/api";
-import { readStorage } from "@/hooks/useStorage";
+import { asyncStorage } from "@/services/storage/async-storage";
+import { defaultJiraConfig } from "@/config/jira.config";
+import { JiraConfig } from "@/types/jira";
+
+// Function to get Jira config from TanStack Query persistence
+const getJiraConfigFromCache = async (): Promise<JiraConfig> => {
+  try {
+    // TanStack Query stores all cache data under the main cache key
+    const cacheData = await asyncStorage.getItem("TANSTACK_QUERY_CACHE");
+
+    if (cacheData) {
+      const parsedCache = JSON.parse(cacheData);
+
+      // Access the jira_config query data from the cache
+      const jiraConfigData = parsedCache.clientState?.queries?.find(
+        (query: any) =>
+          JSON.stringify(query.queryKey) === JSON.stringify(["jira_config"]),
+      );
+
+      if (jiraConfigData?.state?.data) {
+        return jiraConfigData.state.data;
+      }
+    }
+    return defaultJiraConfig;
+  } catch (error) {
+    return defaultJiraConfig;
+  }
+};
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // Debug endpoint to check storage
-  if (request.action === "debugStorage") {
-    (async () => {
-      try {
-        const allItems = await chrome.storage.local.get(null);
-        sendResponse({ success: true, storage: allItems });
-      } catch (err: any) {
-        console.error("Debug: Storage error:", err);
-        sendResponse({ success: false, error: err.message });
-      }
-    })();
-    return true;
-  }
-
   if (request.action === "getJiraTasks") {
-    // Handle async operation properly
     (async () => {
       try {
         // First let's check if storage is available
@@ -28,10 +43,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
 
         // Check if the Jira config key actually exists in storage
-        const config = await readStorage<JiraConfig>("zen_tab_jira_config");
+        const config = await getJiraConfigFromCache();
 
+<<<<<<< Updated upstream
         if (!config) {
           throw new Error("Jira isn't configured yet. Please set up your Jira configuration first.");
+=======
+        if (!config || !config.domain || !config.apiToken || !config.email) {
+          throw new Error("Jira configuration is incomplete");
+>>>>>>> Stashed changes
         }
 
         const tasks = await getMyJiraTasks(config, request.jqlQuery || "");

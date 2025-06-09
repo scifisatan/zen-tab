@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Link } from "@/types/dashboard";
 import { v4 as uuidv4 } from "uuid";
+import { sanitizeUrl } from "@/lib/links";
 
 interface LinkFormDialogProps {
   isOpen: boolean;
@@ -83,7 +84,12 @@ const LinkFormDialog: React.FC<LinkFormDialogProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    // Sanitize the URL before saving
+    const sanitizedFormData = {
+      ...formData,
+      url: sanitizeUrl(formData.url),
+    };
+    onSave(sanitizedFormData);
     onClose();
   };
 

@@ -1,13 +1,8 @@
-import { JiraConfig, JiraTask } from "@/types";
+import { JiraConfig, JiraTask } from "@/types/jira";
+import { normalizeDomain } from "@/lib/links";
 
 export async function getMyJiraTasks(config: JiraConfig, jql: string) {
-  let domain = config.domain;
-  if (!domain.startsWith("https://")) {
-    domain = `https://${domain}`;
-  }
-  if (!domain.endsWith("/")) {
-    domain += "/";
-  }
+  const domain = normalizeDomain(config.domain);
 
   const url = `${domain}rest/api/3/search?jql=${encodeURIComponent(jql ?? "")}`;
 

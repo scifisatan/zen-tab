@@ -31,28 +31,50 @@ const jiraFields = [
 ];
 
 export const JiraSettings: React.FC = () => {
-  const { jiraConfig, updateJiraConfig } = useJiraConfig();
+  const { jiraConfig, setJiraConfig, isLoading } = useJiraConfig();
 
-  const [formData, setFormData] = useState<JiraConfig>(jiraConfig);
+  const [formData, setFormData] = useState<JiraConfig | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    setFormData(jiraConfig);
-    setHasChanges(false);
+    if (jiraConfig) {
+      setFormData(jiraConfig);
+      setHasChanges(false);
+    }
   }, [jiraConfig]);
 
   const handleFieldChange = (field: keyof JiraConfig, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-    setHasChanges(true);
+    if (formData) {
+      setFormData((prev) => ({
+        ...prev!,
+        [field]: value,
+      }));
+      setHasChanges(true);
+    }
   };
 
   const handleSave = () => {
-    updateJiraConfig(formData.domain, formData.apiToken, formData.email);
-    setHasChanges(false);
+    if (formData) {
+      setJiraConfig(formData);
+      setHasChanges(false);
+    }
   };
+
+  if (isLoading || !formData) {
+    return (
+      <div className="space-y-8">
+        <SettingsHeader title="Jira Integration" />
+        <div className="flex items-center justify-center py-8">
+          <div className="text-center">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+            <p className="text-muted-foreground mt-2 text-sm">
+              Loading settings...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">

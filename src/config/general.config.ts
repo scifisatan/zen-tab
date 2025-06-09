@@ -32,12 +32,12 @@ const clockedOutMessages = [
 ];
 
 const weekendMessages = [
-  "Work's done! Time to unwind 🌅",
-  "You've clocked out, enjoy your evening! 🌙",
-  "Office hours are over, relax and recharge ✨",
-  "Time to step away from work and breathe 🍃",
-  "Work day complete! Time for yourself now 🧘‍♂️",
-  "Clocked out! Your evening awaits 🌆",
+  "It's the weekend! Time to relax and recharge 🌈",
+  "Weekend vibes! Enjoy your time off 🎉",
+  "No work today - embrace the weekend spirit! ☀️",
+  "Weekend mode: ON! Time for fun and relaxation 🏖️",
+  "Weekends are for adventures and rest 🌳",
+  "Enjoy your well-deserved weekend break! 🛋️",
 ];
 
 export const defaultGeneralConfig: GeneralConfig = {
