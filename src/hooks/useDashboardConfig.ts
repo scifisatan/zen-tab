@@ -8,7 +8,7 @@ export const useDashboardConfig = () => {
   const queryClient = useQueryClient();
 
   const {
-    data: dashboardConfig = defaultDashboardConfig,
+    data: dashboardConfig,
     isLoading,
     error,
   } = useQuery({

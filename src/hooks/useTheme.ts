@@ -12,12 +12,12 @@ export function useTheme() {
 
   const { data: selectedTheme } = useQuery({
     queryKey: ["selectedTheme"],
-    queryFn: () => "",
+    queryFn: () => "gruvbox",
   });
 
   const { data: appearanceMode } = useQuery({
     queryKey: ["appearanceMode"],
-    queryFn: () => "" as AppearanceMode,
+    queryFn: () => "system" as AppearanceMode,
   });
 
   const { data: customThemes } = useQuery({

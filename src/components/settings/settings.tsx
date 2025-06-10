@@ -51,7 +51,7 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({
           </TabsList>
 
           <div className="mt-4 min-h-0 flex-1 overflow-y-hidden">
-            <ScrollArea className="h-full">
+            <ScrollArea className="h-full px-4">
               <TabsContent
                 value="general"
                 className="h-auto min-h-full space-y-4 p-2"

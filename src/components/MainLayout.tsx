@@ -60,7 +60,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
   }, [selectedTheme, appearanceMode, customThemes]);
 
   if (!selectedTheme) {
-    return null
+    return null;
   }
 
   return (

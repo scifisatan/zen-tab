@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { CustomTheme } from "@/constants/theme-presets";
 import { parseCSSForTheme } from "@/lib/css";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface CustomThemeEditorProps {
   isOpen: boolean;
@@ -22,48 +23,12 @@ interface CustomThemeEditorProps {
 
 const defaultTheme = `:root {
   /* Light mode - Gruvbox Light */
-  --background: #f9f5d7;
-  --foreground: #3c3836;
-  --card: #fbf1c7;
-  --card-foreground: #3c3836;
-  --popover: #fbf1c7;
-  --popover-foreground: #3c3836;
-  --primary: #af3a03;
-  --primary-foreground: #f9f5d7;
-  --secondary: #f2e5bc;
-  --secondary-foreground: #3c3836;
-  --muted: #f2e5bc;
-  --muted-foreground: #665c54;
-  --accent: #ebdbb2;
-  --accent-foreground: #3c3836;
-  --destructive: #cc241d;
-  --destructive-foreground: #f9f5d7;
-  --border: #d5c4a1;
-  --input: #d5c4a1;
-  --ring: #af3a03;
+  /* css-variables here.... */
 }
 
 .dark {
   /* Dark mode - Gruvbox Dark */
-  --background: #1d2021;
-  --foreground: #ebdbb2;
-  --card: #282828;
-  --card-foreground: #ebdbb2;
-  --popover: #32302f;
-  --popover-foreground: #ebdbb2;
-  --primary: #fabd2f;
-  --primary-foreground: #1d2021;
-  --secondary: #3c3836;
-  --secondary-foreground: #ebdbb2;
-  --muted: #3c3836;
-  --muted-foreground: #a89984;
-  --accent: #504945;
-  --accent-foreground: #ebdbb2;
-  --destructive: #fb4934;
-  --destructive-foreground: #ebdbb2;
-  --border: #504945;
-  --input: #3c3836;
-  --ring: #fabd2f;
+ /* css-variables here.... */
 }`;
 
 export const CustomThemeEditor: React.FC<CustomThemeEditorProps> = ({
@@ -129,10 +94,25 @@ export const CustomThemeEditor: React.FC<CustomThemeEditorProps> = ({
           <DialogTitle>
             {editingTheme ? "Edit Custom Theme" : "Create Custom Theme"}
           </DialogTitle>
+          <DialogDescription>
+            <p className="text-muted-foreground text-xs">
+              Paste complete CSS from{" "}
+              <span>
+                {" "}
+                <a
+                  className="underline underline-offset-2"
+                  href="https://tweakcn.com"
+                >
+                  tweakcn.com
+                </a>{" "}
+              </span>{" "}
+              here
+            </p>
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="theme-name">Theme Name</Label>
             <Input
               id="theme-name"
@@ -151,10 +131,6 @@ export const CustomThemeEditor: React.FC<CustomThemeEditorProps> = ({
               placeholder="Paste your complete CSS with both :root and .dark selectors..."
               className="h-96 font-mono text-sm"
             />
-            <p className="text-muted-foreground text-xs">
-              Paste complete CSS including both :root and .dark selectors with
-              all variables
-            </p>
           </div>
         </div>
 

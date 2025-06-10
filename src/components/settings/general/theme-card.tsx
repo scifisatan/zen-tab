@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2, Sun, Moon } from "lucide-react";
-import { CustomTheme } from "@/constants/theme-presets";
+import { CustomTheme } from "@/types/theme";
 import { extractColorsFromTheme } from "@/lib/css";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";

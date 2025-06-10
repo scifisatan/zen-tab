@@ -96,10 +96,10 @@ const ThemeSettings: React.FC = () => {
                 onClick={() => setAppearanceMode(option.id)}
               >
                 <CardContent className="flex flex-col items-center gap-2 p-4">
-                  <Icon className="h-6 w-6" />
+                  <Icon className="h-8 w-8" />
                   <div className="text-center">
-                    <p className="font-medium">{option.name}</p>
-                    <p className="text-muted-foreground text-xs">
+                    <p className="text-lg font-medium">{option.name}</p>
+                    <p className="text-muted-foreground text-sm">
                       {option.description}
                     </p>
                   </div>

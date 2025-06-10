@@ -8,7 +8,7 @@ export const useJiraConfig = () => {
   const queryClient = useQueryClient();
 
   const {
-    data: jiraConfig = defaultJiraConfig,
+    data: jiraConfig,
     isLoading,
     error,
   } = useQuery({
