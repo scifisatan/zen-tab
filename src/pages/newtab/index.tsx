@@ -2,7 +2,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { queryClient, persister } from "@/config";
-import { ThemeProvider } from "@/context/ThemeContext";
 import App from "@/pages/newtab/App";
 import "@pages/newtab/index.css";
 import "@/tailwind.css";
@@ -22,9 +21,7 @@ root.render(
       client={queryClient}
       persistOptions={{ persister }}
     >
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
+      <App />
     </PersistQueryClientProvider>
   </StrictMode>,
 );

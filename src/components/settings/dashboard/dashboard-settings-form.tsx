@@ -4,6 +4,7 @@ import { useDashboardConfig } from "@/hooks/useDashboardConfig";
 import React, { useEffect, useState } from "react";
 import { SaveButton } from "../SaveButton";
 import { SettingsHeader } from "../SettingsFormHeader";
+import { ScrollBar } from "@/components/ui/scroll-area";
 
 export const DashboardSettings: React.FC = () => {
   const { dashboardConfig, setDashboardConfig, isLoading } =
@@ -64,14 +65,14 @@ export const DashboardSettings: React.FC = () => {
         >
           Configuration JSON
         </Label>
-        <div className="max-w-md overflow-hidden">
+        <div className="mx-auto max-w-2xl overflow-hidden">
           <Textarea
             contentEditable
             id="dashboard-config-json"
             value={rawConfig}
             onChange={(e) => handleConfigChange(e.target.value)}
             placeholder="Enter your dashboard configuration..."
-            className="h-[40vh] resize-none font-mono text-sm"
+            className="no-scrollbar border-accent h-[35vh] resize-none border-2 font-mono text-sm"
             style={{
               whiteSpace: "nowrap",
               overflowX: "auto",

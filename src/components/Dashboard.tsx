@@ -6,16 +6,7 @@ export default function Dashboard() {
     useDashboardConfig();
 
   if (isLoading || !dashboardConfig) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" />
-          <p className="text-muted-foreground mt-2 text-sm">
-            Loading dashboard...
-          </p>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (

@@ -8,7 +8,7 @@ export const useGeneralConfig = () => {
   const queryClient = useQueryClient();
 
   const {
-    data: generalConfig = defaultGeneralConfig,
+    data: generalConfig,
     isLoading,
     error,
   } = useQuery({
