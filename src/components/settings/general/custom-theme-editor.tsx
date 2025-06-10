@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +10,8 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { CustomTheme } from "@/context/ThemeContext";
+import { CustomTheme } from "@/constants/theme-presets";
+import { parseCSSForTheme } from "@/lib/css";
 
 interface CustomThemeEditorProps {
   isOpen: boolean;
@@ -20,47 +21,49 @@ interface CustomThemeEditorProps {
 }
 
 const defaultTheme = `:root {
-  --background: oklch(0.98 0.01 85);
-  --foreground: oklch(0.25 0.02 85);
-  --card: oklch(0.96 0.02 85);
-  --card-foreground: oklch(0.25 0.02 85);
-  --popover: oklch(0.96 0.02 85);
-  --popover-foreground: oklch(0.25 0.02 85);
-  --primary: oklch(0.55 0.15 75);
-  --primary-foreground: oklch(0.98 0.01 85);
-  --secondary: oklch(0.92 0.02 85);
-  --secondary-foreground: oklch(0.35 0.02 85);
-  --muted: oklch(0.92 0.02 85);
-  --muted-foreground: oklch(0.45 0.02 85);
-  --accent: oklch(0.88 0.02 85);
-  --accent-foreground: oklch(0.25 0.02 85);
-  --destructive: oklch(0.55 0.15 25);
-  --destructive-foreground: oklch(0.98 0.01 85);
-  --border: oklch(0.85 0.02 85);
-  --input: oklch(0.85 0.02 85);
-  --ring: oklch(0.55 0.15 75);
+  /* Light mode - Gruvbox Light */
+  --background: #f9f5d7;
+  --foreground: #3c3836;
+  --card: #fbf1c7;
+  --card-foreground: #3c3836;
+  --popover: #fbf1c7;
+  --popover-foreground: #3c3836;
+  --primary: #af3a03;
+  --primary-foreground: #f9f5d7;
+  --secondary: #f2e5bc;
+  --secondary-foreground: #3c3836;
+  --muted: #f2e5bc;
+  --muted-foreground: #665c54;
+  --accent: #ebdbb2;
+  --accent-foreground: #3c3836;
+  --destructive: #cc241d;
+  --destructive-foreground: #f9f5d7;
+  --border: #d5c4a1;
+  --input: #d5c4a1;
+  --ring: #af3a03;
 }
 
 .dark {
-  --background: oklch(0.15 0.02 85);
-  --foreground: oklch(0.85 0.02 85);
-  --card: oklch(0.18 0.02 85);
-  --card-foreground: oklch(0.85 0.02 85);
-  --popover: oklch(0.18 0.02 85);
-  --popover-foreground: oklch(0.85 0.02 85);
-  --primary: oklch(0.65 0.15 75);
-  --primary-foreground: oklch(0.15 0.02 85);
-  --secondary: oklch(0.25 0.02 85);
-  --secondary-foreground: oklch(0.75 0.02 85);
-  --muted: oklch(0.25 0.02 85);
-  --muted-foreground: oklch(0.55 0.02 85);
-  --accent: oklch(0.30 0.02 85);
-  --accent-foreground: oklch(0.85 0.02 85);
-  --destructive: oklch(0.65 0.15 25);
-  --destructive-foreground: oklch(0.15 0.02 85);
-  --border: oklch(0.35 0.02 85);
-  --input: oklch(0.25 0.02 85);
-  --ring: oklch(0.65 0.15 75);
+  /* Dark mode - Gruvbox Dark */
+  --background: #1d2021;
+  --foreground: #ebdbb2;
+  --card: #282828;
+  --card-foreground: #ebdbb2;
+  --popover: #32302f;
+  --popover-foreground: #ebdbb2;
+  --primary: #fabd2f;
+  --primary-foreground: #1d2021;
+  --secondary: #3c3836;
+  --secondary-foreground: #ebdbb2;
+  --muted: #3c3836;
+  --muted-foreground: #a89984;
+  --accent: #504945;
+  --accent-foreground: #ebdbb2;
+  --destructive: #fb4934;
+  --destructive-foreground: #ebdbb2;
+  --border: #504945;
+  --input: #3c3836;
+  --ring: #fabd2f;
 }`;
 
 export const CustomThemeEditor: React.FC<CustomThemeEditorProps> = ({
@@ -69,45 +72,33 @@ export const CustomThemeEditor: React.FC<CustomThemeEditorProps> = ({
   onSave,
   editingTheme,
 }) => {
-  const [themeName, setThemeName] = useState(editingTheme?.name || "");
+  const [themeName, setThemeName] = useState("");
+  const [themeCSS, setThemeCSS] = useState("");
 
-  // Combine light and dark themes from editing theme, or use default
-  const getInitialThemeCSS = () => {
-    if (editingTheme) {
-      return `${editingTheme.lightTheme}\n\n${editingTheme.darkTheme}`;
+  useEffect(() => {
+    if (isOpen) {
+      if (editingTheme) {
+        setThemeName(editingTheme.name);
+        const combinedCSS = `${editingTheme.lightTheme}\n\n${editingTheme.darkTheme}`;
+        setThemeCSS(combinedCSS);
+      } else {
+        setThemeName("");
+        setThemeCSS(defaultTheme);
+      }
     }
-    return defaultTheme;
-  };
-
-  const [themeCSS, setThemeCSS] = useState(getInitialThemeCSS());
+  }, [isOpen, editingTheme]);
 
   const handleSave = () => {
     if (!themeName.trim()) return;
 
-    // Parse the CSS to extract light and dark themes
-    const parseThemeCSS = (css: string) => {
-      const cleanCSS = css
-        .replace(/\/\*[\s\S]*?\*\//g, "")
-        .replace(/\s+/g, " ");
-
-      // Extract :root content
-      const rootMatch = cleanCSS.match(/:root\s*\{([^}]+)\}/);
-      const lightTheme = rootMatch ? `:root {${rootMatch[1]}}` : "";
-
-      // Extract .dark content
-      const darkMatch = cleanCSS.match(/\.dark\s*\{([^}]+)\}/);
-      const darkTheme = darkMatch ? `.dark {${darkMatch[1]}}` : "";
-
-      return { lightTheme, darkTheme };
-    };
-
-    const { lightTheme, darkTheme } = parseThemeCSS(themeCSS);
+    const { lightTheme, darkTheme } = parseCSSForTheme(themeCSS);
 
     const theme: CustomTheme = {
       id: editingTheme?.id || `custom_${Date.now()}`,
       name: themeName,
       lightTheme: lightTheme.trim(),
       darkTheme: darkTheme.trim(),
+      isBuiltIn: false,
     };
 
     onSave(theme);
@@ -115,12 +106,24 @@ export const CustomThemeEditor: React.FC<CustomThemeEditorProps> = ({
   };
 
   const handleReset = () => {
-    setThemeName(editingTheme?.name || "");
-    setThemeCSS(getInitialThemeCSS());
+    if (editingTheme) {
+      setThemeName(editingTheme.name);
+      const combinedCSS = `${editingTheme.lightTheme}\n\n${editingTheme.darkTheme}`;
+      setThemeCSS(combinedCSS);
+    } else {
+      setThemeName("");
+      setThemeCSS(defaultTheme);
+    }
+  };
+
+  const handleClose = () => {
+    onClose();
+    setThemeName("");
+    setThemeCSS("");
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-h-[80vh] max-w-4xl">
         <DialogHeader>
           <DialogTitle>
@@ -157,9 +160,9 @@ export const CustomThemeEditor: React.FC<CustomThemeEditorProps> = ({
 
         <DialogFooter className="gap-2">
           <Button variant="outline" onClick={handleReset}>
-            Reset to Default
+            Reset
           </Button>
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={handleClose}>
             Cancel
           </Button>
           <Button onClick={handleSave} disabled={!themeName.trim()}>
