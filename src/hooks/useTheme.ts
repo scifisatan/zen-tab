@@ -10,22 +10,22 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 export function useTheme() {
   const queryClient = useQueryClient();
 
-  const { data: selectedTheme = "gruvbox" } = useQuery({
+  const { data: selectedTheme } = useQuery({
     queryKey: ["selectedTheme"],
-    queryFn: () => "gruvbox", // fallback if nothing is persisted
+    queryFn: () => "",
   });
 
-  const { data: appearanceMode = "system" as AppearanceMode } = useQuery({
+  const { data: appearanceMode } = useQuery({
     queryKey: ["appearanceMode"],
-    queryFn: () => "system" as AppearanceMode, // fallback if nothing is persisted
+    queryFn: () => "" as AppearanceMode,
   });
 
-  const { data: customThemes = [] } = useQuery({
+  const { data: customThemes } = useQuery({
     queryKey: ["customThemes"],
-    queryFn: () => [], // fallback if nothing is persisted
+    queryFn: () => [],
   });
 
-  const getAllThemes = () => [...BUILT_IN_THEMES, ...customThemes];
+  const getAllThemes = () => [...BUILT_IN_THEMES, ...(customThemes || [])];
 
   const setSelectedTheme = (theme: string) => {
     queryClient.setQueryData(["selectedTheme"], theme);
