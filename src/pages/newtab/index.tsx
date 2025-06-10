@@ -1,13 +1,30 @@
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import Newtab from "@pages/newtab/Newtab";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { queryClient, persister } from "@/config";
+import { ThemeProvider } from "@/context/ThemeContext";
+import App from "@/pages/newtab/App";
 import "@pages/newtab/index.css";
-import "@src/tailwind.css";
+import "@/tailwind.css";
 
-function init() {
-  const rootContainer = document.querySelector("#__root");
-  if (!rootContainer) throw new Error("Can't find Newtab root element");
-  const root = createRoot(rootContainer);
-  root.render(<Newtab />);
+const rootElement = document.getElementById("__root");
+if (!rootElement) {
+  throw new Error(
+    "Root element not found. Check that your HTML file contains an element with id '__root'",
+  );
 }
 
-init();
+const root = createRoot(rootElement);
+
+root.render(
+  <StrictMode>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{ persister }}
+    >
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    </PersistQueryClientProvider>
+  </StrictMode>,
+);

@@ -2,7 +2,7 @@ name: Build & Release Extension
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 permissions:
   contents: write
 jobs:
@@ -16,51 +16,51 @@ jobs:
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v3
-      
+
       - name: ⚙️ Set up Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-      
+
       - name: 📦 Install dependencies
         run: bun install
-      
+
       - name: 🛡️ Reconstruct key.pem
         run: |
           echo "$CHROME_KEY_B64" | base64 -d > key.pem
-      
+
       - name: 🔧 Build with Vite (Chrome)
         run: bun run build:chrome
-      
+
       - name: 🔧 Build with Vite (Firefox)
         run: bun run build:firefox
-      
+
       - name: 📦 Pack Chrome CRX and ZIP
         run: |
           VERSION=$(jq -r .version dist_chrome/manifest.json)
           EXTENSION_NAME="zen-tab"
-          
+
           # Create Chrome ZIP file
           cd dist_chrome
           zip -r "../${EXTENSION_NAME}-chrome-${VERSION}.zip" .
           cd ..
-          
+
           # Create Chrome CRX file
           bun add -g crx
           crx pack dist_chrome --private-key=key.pem
-          
+
           echo "CHROME_ZIP_FILE_NAME=${EXTENSION_NAME}-chrome-${VERSION}.zip" >> $GITHUB_ENV
-      
+
       - name: 🔐 Handle Firefox XPI (with fallback)
         run: |
           VERSION=$(jq -r .version dist_firefox/manifest.json)
           EXTENSION_NAME="zen-tab"
-          
+
           # Always create a ZIP fallback
           cd dist_firefox
           zip -r "../${EXTENSION_NAME}-firefox-${VERSION}.zip" .
           cd ..
-          
+
           # Try to sign XPI
           bun add -g web-ext
           if web-ext sign \
@@ -83,10 +83,10 @@ jobs:
             echo "XPI signing failed, will use ZIP fallback"
             echo "XPI_SIGNED=false" >> $GITHUB_ENV
           fi
-          
+
           echo "ZIP_FILE_NAME=${EXTENSION_NAME}-firefox-${VERSION}.zip" >> $GITHUB_ENV
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
-         
+
       - name: 📤 Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -97,17 +97,17 @@ jobs:
             ${{ env.ZIP_FILE_NAME }}
           body: |
             ## 🚀 Release Notes
-            
+
             ### Installation Instructions
-            
+
             **Chrome:**
             - **Recommended:** Download `zen-tab.crx` (signed extension)
             - **Alternative:** Download `${{ env.CHROME_ZIP_FILE_NAME }}` (unpacked version)
-            
+
             **Firefox:**
             ${{ env.XPI_SIGNED == 'true' && format('- **Recommended:** Download `{0}` (signed XPI)', env.XPI_FILE_NAME) || '- **XPI signing failed** - using ZIP fallback' }}
             - **Fallback:** Download `${{ env.ZIP_FILE_NAME }}` and follow the Firefox installation guide
-            
+
             ---
           generate_release_notes: true
         env:

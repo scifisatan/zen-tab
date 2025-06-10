@@ -1,34 +1,58 @@
-import { Task, JiraConfig } from "@src/types";
+import { getMyJiraTasks } from "@/api";
+import { asyncStorage } from "@/services/storage/async-storage";
+import { defaultJiraConfig } from "@/config/jira.config";
+import { JiraConfig } from "@/types/jira";
 
-console.log("background script loaded");
+// Function to get Jira config from TanStack Query persistence
+const getJiraConfigFromCache = async (): Promise<JiraConfig> => {
+  try {
+    // TanStack Query stores all cache data under the main cache key
+    const cacheData = await asyncStorage.getItem("TANSTACK_QUERY_CACHE");
 
-import { getMyJiraTasks } from "@src/api";
-import { readStorage } from "@src/hooks/useStorage";
+    if (cacheData) {
+      const parsedCache = JSON.parse(cacheData);
+
+      // Access the jira_config query data from the cache
+      const jiraConfigData = parsedCache.clientState?.queries?.find(
+        (query: any) =>
+          JSON.stringify(query.queryKey) === JSON.stringify(["jira_config"]),
+      );
+
+      if (jiraConfigData?.state?.data) {
+        return jiraConfigData.state.data;
+      }
+    }
+    return defaultJiraConfig;
+  } catch (error) {
+    return defaultJiraConfig;
+  }
+};
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "getJiraTasks") {
-    readStorage<JiraConfig>("jiraConfig", "sync")
-      .then((config) => {
-        if (
-          !config ||
-          !config.apiToken ||
-          !config.jiraDomain ||
-          !config.email
-        ) {
+    (async () => {
+      try {
+        // First let's check if storage is available
+        if (!chrome.storage.local) {
+          throw new Error("Chrome storage API not available");
+        }
+
+        // Check if the Jira config key actually exists in storage
+        const config = await getJiraConfigFromCache();
+
+        if (!config) {
           throw new Error(
-            "Jira configuration not found. Please configure your settings in the extension popup.",
+            "Jira isn't configured yet. Please set up your Jira configuration first.",
           );
         }
-        return getMyJiraTasks(config);
-      })
-      .then((tasks: Task[]) => {
-        sendResponse({ success: true, tasks: tasks });
-      })
-      .catch((err: Error) => {
-        console.error("Failed to fetch tasks:", err);
-        sendResponse({ success: false, error: err.message });
-      });
 
-    return true;
+        const tasks = await getMyJiraTasks(config, request.jqlQuery || "");
+        sendResponse({ success: true, tasks: tasks });
+      } catch (err: any) {
+        sendResponse({ success: false, error: err.message });
+      }
+    })();
+
+    return true; // Keep the message channel open for async response
   }
 });
