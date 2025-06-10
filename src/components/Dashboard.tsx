@@ -19,7 +19,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4 md:flex-row">
+    <div className="flex flex-1 flex-col gap-4 overflow-y-hidden md:flex-row">
       {dashboardConfig.sections.map((section) => (
         <Section
           key={section.id}
