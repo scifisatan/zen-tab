@@ -95,31 +95,44 @@ jobs:
           
           # Check each file and add to list if it exists
           if [ -f "zen-tab.crx" ]; then
-            RELEASE_FILES="$RELEASE_FILES zen-tab.crx"
+            RELEASE_FILES="zen-tab.crx"
+            echo "✅ Found: zen-tab.crx"
           fi
           
           if [ -f "${{ env.CHROME_ZIP_FILE_NAME }}" ]; then
             RELEASE_FILES="$RELEASE_FILES ${{ env.CHROME_ZIP_FILE_NAME }}"
+            echo "✅ Found: ${{ env.CHROME_ZIP_FILE_NAME }}"
           fi
           
           if [ "${{ env.XPI_SIGNED }}" = "true" ] && [ -f "${{ env.XPI_FILE_NAME }}" ]; then
             RELEASE_FILES="$RELEASE_FILES ${{ env.XPI_FILE_NAME }}"
+            echo "✅ Found: ${{ env.XPI_FILE_NAME }}"
+          else
+            echo "❌ XPI file not found or signing failed"
           fi
           
           if [ -f "${{ env.ZIP_FILE_NAME }}" ]; then
             RELEASE_FILES="$RELEASE_FILES ${{ env.ZIP_FILE_NAME }}"
+            echo "✅ Found: ${{ env.ZIP_FILE_NAME }}"
           fi
           
+          # Clean up the RELEASE_FILES string (remove leading space)
+          RELEASE_FILES=$(echo "$RELEASE_FILES" | sed 's/^ *//')
           echo "RELEASE_FILES=$RELEASE_FILES" >> $GITHUB_ENV
           
           # List all files for debugging
-          echo "Available files:"
-          ls -la *.{crx,zip,xpi} 2>/dev/null || echo "No matching files found"
+          echo "📁 All available files:"
+          ls -la *.crx *.zip 2>/dev/null || echo "No .crx or .zip files found"
+          
+          echo "🚀 Files to upload: $RELEASE_FILES"
 
       - name: 📤 Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v1
         with:
-          files: ${{ env.RELEASE_FILES }}
+          files: |
+            zen-tab.crx
+            ${{ env.CHROME_ZIP_FILE_NAME }}
+            ${{ env.ZIP_FILE_NAME }}
           body: |
             ## 🚀 Release Notes v${{ env.VERSION }}
             
