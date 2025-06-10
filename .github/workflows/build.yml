@@ -3,8 +3,10 @@ on:
   push:
     tags:
       - "v*"
+
 permissions:
   contents: write
+
 jobs:
   build:
     name: Build and Package Extensions
@@ -13,54 +15,56 @@ jobs:
       FIREFOX_API_KEY: ${{ secrets.FIREFOX_API_KEY }}
       FIREFOX_API_SECRET: ${{ secrets.FIREFOX_API_SECRET }}
       CHROME_KEY_B64: ${{ secrets.CHROME_KEY_B64 }}
+    
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v4
+        
       - name: ⚙️ Set up Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-
+          
       - name: 📦 Install dependencies
         run: bun install
-
+        
       - name: 🛡️ Reconstruct key.pem
         run: |
           echo "$CHROME_KEY_B64" | base64 -d > key.pem
-
+          
       - name: 🔧 Build with Vite (Chrome)
         run: bun run build:chrome
-
+        
       - name: 🔧 Build with Vite (Firefox)
         run: bun run build:firefox
-
+        
       - name: 📦 Pack Chrome CRX and ZIP
         run: |
           VERSION=$(jq -r .version dist_chrome/manifest.json)
           EXTENSION_NAME="zen-tab"
-
+          
           # Create Chrome ZIP file
           cd dist_chrome
           zip -r "../${EXTENSION_NAME}-chrome-${VERSION}.zip" .
           cd ..
-
+          
           # Create Chrome CRX file
           bun add -g crx
           crx pack dist_chrome --private-key=key.pem
-
+          
           echo "CHROME_ZIP_FILE_NAME=${EXTENSION_NAME}-chrome-${VERSION}.zip" >> $GITHUB_ENV
-
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          
       - name: 🔐 Handle Firefox XPI (with fallback)
         run: |
           VERSION=$(jq -r .version dist_firefox/manifest.json)
           EXTENSION_NAME="zen-tab"
-
+          
           # Always create a ZIP fallback
           cd dist_firefox
           zip -r "../${EXTENSION_NAME}-firefox-${VERSION}.zip" .
           cd ..
-
+          
           # Try to sign XPI
           bun add -g web-ext
           if web-ext sign \
@@ -70,9 +74,7 @@ jobs:
             --channel="unlisted" \
             --amo-metadata=amo-metadata.json \
             --artifacts-dir=.; then
-            
             echo "XPI_SIGNED=true" >> $GITHUB_ENV
-            
             # Find and rename the generated XPI file
             XPI_FILE=$(find . -name "*.xpi" -type f | head -n 1)
             if [ -n "$XPI_FILE" ]; then
@@ -83,32 +85,56 @@ jobs:
             echo "XPI signing failed, will use ZIP fallback"
             echo "XPI_SIGNED=false" >> $GITHUB_ENV
           fi
-
+          
           echo "ZIP_FILE_NAME=${EXTENSION_NAME}-firefox-${VERSION}.zip" >> $GITHUB_ENV
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: 🗂️ Prepare release files
+        run: |
+          # Create a list of files that actually exist
+          RELEASE_FILES=""
+          
+          # Check each file and add to list if it exists
+          if [ -f "zen-tab.crx" ]; then
+            RELEASE_FILES="$RELEASE_FILES zen-tab.crx"
+          fi
+          
+          if [ -f "${{ env.CHROME_ZIP_FILE_NAME }}" ]; then
+            RELEASE_FILES="$RELEASE_FILES ${{ env.CHROME_ZIP_FILE_NAME }}"
+          fi
+          
+          if [ "${{ env.XPI_SIGNED }}" = "true" ] && [ -f "${{ env.XPI_FILE_NAME }}" ]; then
+            RELEASE_FILES="$RELEASE_FILES ${{ env.XPI_FILE_NAME }}"
+          fi
+          
+          if [ -f "${{ env.ZIP_FILE_NAME }}" ]; then
+            RELEASE_FILES="$RELEASE_FILES ${{ env.ZIP_FILE_NAME }}"
+          fi
+          
+          echo "RELEASE_FILES=$RELEASE_FILES" >> $GITHUB_ENV
+          
+          # List all files for debugging
+          echo "Available files:"
+          ls -la *.{crx,zip,xpi} 2>/dev/null || echo "No matching files found"
 
       - name: 📤 Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            zen-tab.crx
-            ${{ env.CHROME_ZIP_FILE_NAME }}
-            ${{ env.XPI_FILE_NAME }}
-            ${{ env.ZIP_FILE_NAME }}
+          files: ${{ env.RELEASE_FILES }}
           body: |
-            ## 🚀 Release Notes
-
+            ## 🚀 Release Notes v${{ env.VERSION }}
+            
             ### Installation Instructions
-
+            
             **Chrome:**
             - **Recommended:** Download `zen-tab.crx` (signed extension)
             - **Alternative:** Download `${{ env.CHROME_ZIP_FILE_NAME }}` (unpacked version)
-
+            
             **Firefox:**
             ${{ env.XPI_SIGNED == 'true' && format('- **Recommended:** Download `{0}` (signed XPI)', env.XPI_FILE_NAME) || '- **XPI signing failed** - using ZIP fallback' }}
             - **Fallback:** Download `${{ env.ZIP_FILE_NAME }}` and follow the Firefox installation guide
-
+            
             ---
           generate_release_notes: true
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
