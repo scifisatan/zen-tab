@@ -64,7 +64,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
   }
 
   return (
-    <div className="mx-auto flex h-screen max-w-7xl flex-col overflow-clip p-6 font-sans">
+    <div className="mx-auto flex h-screen max-w-9/12 flex-col overflow-clip p-6 font-sans">
       {children}
     </div>
   );

@@ -1,51 +1,51 @@
-import {
-  AppearanceMode,
-  BUILT_IN_THEMES,
-  customProps,
-} from "@/constants/theme-presets";
-import { CustomTheme } from "@/constants/theme-presets";
+import { BUILT_IN_THEMES, customProps } from "@/constants/theme-presets";
+import { CustomTheme, AppearanceMode } from "@/types/theme";
 import { parseThemeCSS } from "@/lib/css";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+const SELECTED_THEME_KEY = "selectedTheme";
+const APPEARANCE_MODE_KEY = "appearanceMode";
+const CUSTOM_THEMES_KEY = "customThemes";
 
 export function useTheme() {
   const queryClient = useQueryClient();
 
   const { data: selectedTheme } = useQuery({
-    queryKey: ["selectedTheme"],
+    queryKey: [SELECTED_THEME_KEY],
     queryFn: () => "gruvbox",
   });
 
-  const { data: appearanceMode } = useQuery({
-    queryKey: ["appearanceMode"],
+  const { data: appearanceMode = "system" } = useQuery<AppearanceMode>({
+    queryKey: [APPEARANCE_MODE_KEY],
     queryFn: () => "system" as AppearanceMode,
   });
 
-  const { data: customThemes } = useQuery({
-    queryKey: ["customThemes"],
-    queryFn: () => [],
+  const { data: customThemes } = useQuery<CustomTheme[]>({
+    queryKey: [CUSTOM_THEMES_KEY],
+    queryFn: () => [] as CustomTheme[],
   });
 
   const getAllThemes = () => [...BUILT_IN_THEMES, ...(customThemes || [])];
 
   const setSelectedTheme = (theme: string) => {
-    queryClient.setQueryData(["selectedTheme"], theme);
+    queryClient.setQueryData([SELECTED_THEME_KEY], theme);
   };
 
   const setAppearanceMode = (mode: AppearanceMode) => {
-    queryClient.setQueryData(["appearanceMode"], mode);
+    queryClient.setQueryData([APPEARANCE_MODE_KEY], mode);
   };
 
   const addCustomTheme = (newTheme: CustomTheme) => {
     const current =
-      queryClient.getQueryData<CustomTheme[]>(["customThemes"]) || [];
-    queryClient.setQueryData(["customThemes"], [...current, newTheme]);
+      queryClient.getQueryData<CustomTheme[]>([CUSTOM_THEMES_KEY]) || [];
+    queryClient.setQueryData([CUSTOM_THEMES_KEY], [...current, newTheme]);
   };
 
   const removeCustomTheme = (id: string) => {
     const current =
-      queryClient.getQueryData<CustomTheme[]>(["customThemes"]) || [];
+      queryClient.getQueryData<CustomTheme[]>([CUSTOM_THEMES_KEY]) || [];
     queryClient.setQueryData(
-      ["customThemes"],
+      [CUSTOM_THEMES_KEY],
       current.filter((t) => t.id !== id),
     );
 
@@ -57,9 +57,9 @@ export function useTheme() {
 
   const updateCustomTheme = (updatedTheme: CustomTheme) => {
     const current =
-      queryClient.getQueryData<CustomTheme[]>(["customThemes"]) || [];
+      queryClient.getQueryData<CustomTheme[]>([CUSTOM_THEMES_KEY]) || [];
     queryClient.setQueryData(
-      ["customThemes"],
+      [CUSTOM_THEMES_KEY],
       current.map((t) => (t.id === updatedTheme.id ? updatedTheme : t)),
     );
   };
