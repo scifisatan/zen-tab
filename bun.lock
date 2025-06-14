@@ -25,6 +25,7 @@
         "cmdk": "^1.1.1",
         "date-fns": "^4.1.0",
         "lucide-react": "^0.513.0",
+        "nepali-datetime": "^1.4.1",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
         "react-hook-form": "^7.57.0",
@@ -876,6 +877,8 @@
     "nanoid": ["nanoid@3.3.11", "", { "bin": { "nanoid": "bin/nanoid.cjs" } }, "sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w=="],
 
     "natural-compare": ["natural-compare@1.4.0", "", {}, "sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw=="],
+
+    "nepali-datetime": ["nepali-datetime@1.4.1", "", {}, "sha512-G+c83fPgBlzTarta6PHGDWYp6ck6IAjsbXDR7iviqHrcnpGoIYwy2qd90UsKT4cd8l7cEP6B9YwOwShHGyfbWQ=="],
 
     "node-releases": ["node-releases@2.0.19", "", {}, "sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw=="],
 

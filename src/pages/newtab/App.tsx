@@ -9,20 +9,21 @@ const App = () => {
   const [isSettingsDialogVisible, setIsSettingsDialogVisible] = useState(false);
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Handle 'S' key to open settings dialog
-      if (event.key.toLowerCase() === 's') {
+      // Handle 'Alt+S' key to open settings dialog
+      if (event.altKey && event.key.toLowerCase() === "s") {
+        event.preventDefault(); // Prevent default browser behavior
         setIsSettingsDialogVisible(true);
       }
       // Handle 'Esc' key to close settings dialog when open
-      else if (event.key === 'Escape' && isSettingsDialogVisible) {
+      else if (event.key === "Escape" && isSettingsDialogVisible) {
         setIsSettingsDialogVisible(false);
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    
+    document.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isSettingsDialogVisible]);
 

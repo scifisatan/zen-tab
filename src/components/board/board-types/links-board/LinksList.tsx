@@ -1,6 +1,6 @@
 import React from "react";
 import { Link as LinkType } from "@/types/dashboard";
-import LinkItem from "./LinkItem";
+import { LinkItem } from "./LinkItem";
 
 interface LinksListProps {
   links: LinkType[];
@@ -16,7 +16,7 @@ const LinksList: React.FC<LinksListProps> = ({
   onDeleteLink,
 }) => {
   return (
-    <div className="mt-2 space-y-1">
+    <div className="space-y-1">
       {links.map((link) => (
         <LinkItem
           key={link.id}
@@ -30,4 +30,4 @@ const LinksList: React.FC<LinksListProps> = ({
   );
 };
 
-export default LinksList;
+export { LinksList };

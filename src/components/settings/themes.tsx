@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Palette, Sun, Moon, Monitor } from "lucide-react";
 import { CustomThemeEditor } from "@/components/settings/general/custom-theme-editor";
-import { CustomTheme, AppearanceMode } from "@/constants/theme-presets";
+import { CustomTheme, AppearanceMode } from "@/types/theme";
 import { useTheme } from "@/hooks/useTheme";
 import ThemeCard from "./general/theme-card";
 

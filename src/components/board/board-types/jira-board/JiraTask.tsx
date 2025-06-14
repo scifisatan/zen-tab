@@ -6,7 +6,7 @@ interface JiraTaskProps {
   task: JiraTaskType;
 }
 
-const JiraTask: React.FC<JiraTaskProps> = ({ task }) => {
+export const JiraTask: React.FC<JiraTaskProps> = ({ task }) => {
   const statusConfig: Record<
     string,
     { circle: string; badge: string; bg: string }
@@ -81,5 +81,3 @@ const JiraTask: React.FC<JiraTaskProps> = ({ task }) => {
     </div>
   );
 };
-
-export default JiraTask;
