@@ -2,6 +2,7 @@ import React from "react";
 import * as Icons from "lucide-react";
 import { Link as LinkType } from "@/types/dashboard";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface LinkItemProps {
   link: LinkType;
@@ -10,7 +11,7 @@ interface LinkItemProps {
   isEditable?: boolean;
 }
 
-const LinkItem: React.FC<LinkItemProps> = ({
+export const LinkItem: React.FC<LinkItemProps> = ({
   link,
   onEdit,
   onDelete,
@@ -37,28 +38,30 @@ const LinkItem: React.FC<LinkItemProps> = ({
             isEditable ? "visible" : "hidden",
           )}
         >
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={(e) => {
               e.preventDefault();
               onEdit && onEdit();
             }}
-            className="rounded p-1"
+            className="h-8 w-8 p-0"
           >
             <Icons.Edit size={18} />
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={(e) => {
               e.preventDefault();
               onDelete && onDelete();
             }}
-            className="rounded p-1"
+            className="text-destructive hover:text-destructive h-8 w-8 p-0"
           >
             <Icons.Trash size={18} />
-          </button>
+          </Button>
         </div>
       )}
     </div>
   );
 };
-
-export default LinkItem;

@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { CustomTheme } from "@/constants/theme-presets";
+import { CustomTheme } from "@/types/theme";
 import { parseCSSForTheme } from "@/lib/css";
 import { DialogDescription } from "@radix-ui/react-dialog";
 

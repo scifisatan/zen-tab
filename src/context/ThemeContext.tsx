@@ -1,14 +1,15 @@
-import { useTheme as useSimpleTheme, Theme } from "@/hooks/useTheme";
+import { useTheme as useSimpleTheme } from "@/hooks/useTheme";
+import { AppearanceMode } from "@/types/theme";
 import { createContext, useContext, useEffect } from "react";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
-  defaultTheme?: Theme;
+  defaultTheme?: AppearanceMode;
 };
 
 type ThemeProviderState = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
+  theme: AppearanceMode;
+  setTheme: (theme: AppearanceMode) => void;
 };
 
 const initialState: ThemeProviderState = {
@@ -23,10 +24,10 @@ export function ThemeProvider({
   defaultTheme = "system",
   ...props
 }: ThemeProviderProps) {
-  const { theme, setTheme: updateTheme } = useSimpleTheme();
+  const { appearanceMode, setAppearanceMode: updateTheme } = useSimpleTheme();
 
   // Use the theme from cache or default
-  const currentTheme = theme || defaultTheme;
+  const currentTheme = appearanceMode || defaultTheme;
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -48,7 +49,7 @@ export function ThemeProvider({
 
   const value = {
     theme: currentTheme,
-    setTheme: (newTheme: Theme) => {
+    setTheme: (newTheme: AppearanceMode) => {
       updateTheme(newTheme);
     },
   };
