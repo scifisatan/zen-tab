@@ -3,6 +3,7 @@ import { cosmicNightTheme } from "./themes/cosmic-night.theme";
 import { doom64Theme } from "./themes/doom64.theme";
 import { gruvboxTheme } from "./themes/gruvbox.theme";
 import { lavenderMistTheme } from "./themes/lavender-mist.theme";
+import { tangerineTheme } from "./themes/tangerine.theme";
 
 export const BUILT_IN_THEMES = [
   gruvboxTheme,
@@ -10,6 +11,7 @@ export const BUILT_IN_THEMES = [
   cosmicNightTheme,
   lavenderMistTheme,
   doom64Theme,
+  tangerineTheme,
 ];
 
 export const customProps = [
