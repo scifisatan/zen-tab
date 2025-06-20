@@ -32,6 +32,9 @@
     "@tanstack/query-sync-storage-persister": "^5.80.6",
     "@tanstack/react-query": "^5.80.6",
     "@tanstack/react-query-persist-client": "^5.80.6",
+    "@tiptap/extension-placeholder": "^2.14.1",
+    "@tiptap/react": "^2.14.1",
+    "@tiptap/starter-kit": "^2.14.1",
     "@types/firefox-webext-browser": "^120.0.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -50,6 +53,7 @@
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.32",
+    "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.0.17",
     "@types/chrome": "^0.0.326",
     "@types/node": "^22.15.21",
