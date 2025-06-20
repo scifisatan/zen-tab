@@ -1,8 +1,7 @@
 import { DashboardConfig } from "@/types/dashboard";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { defaultDashboardConfig } from "@/config/dashboard.config";
-
-const DASHBOARD_CONFIG_KEY = "dashboard_config";
+import { DASHBOARD_CONFIG_KEY } from "@/constants/storage-key";
 
 export const useDashboardConfig = () => {
   const queryClient = useQueryClient();

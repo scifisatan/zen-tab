@@ -3,9 +3,11 @@ import { CustomTheme, AppearanceMode } from "@/types/theme";
 import { parseThemeCSS } from "@/lib/css";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-const SELECTED_THEME_KEY = "selectedTheme";
-const APPEARANCE_MODE_KEY = "appearanceMode";
-const CUSTOM_THEMES_KEY = "customThemes";
+import {
+  SELECTED_THEME_KEY,
+  CUSTOM_THEMES_KEY,
+  APPEARANCE_MODE_KEY,
+} from "@/constants/storage-key";
 
 export function useTheme() {
   const queryClient = useQueryClient();

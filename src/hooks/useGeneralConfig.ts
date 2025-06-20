@@ -1,8 +1,7 @@
 import { GeneralConfig } from "@/types/general";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { defaultGeneralConfig } from "@/config/general.config";
-
-const GENERAL_CONFIG_KEY = "general_config";
+import { GENERAL_CONFIG_KEY } from "@/constants/storage-key";
 
 export const useGeneralConfig = () => {
   const queryClient = useQueryClient();

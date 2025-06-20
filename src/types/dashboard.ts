@@ -5,7 +5,7 @@ export interface Link {
   icon: string;
 }
 
-export type BoardType = "links" | "jira" | 'nepali-date';
+export type BoardType = "links" | "jira" | 'nepali-date' | 'editor';
 
 export interface Board {
   id: string;

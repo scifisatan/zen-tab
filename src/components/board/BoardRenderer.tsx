@@ -1,5 +1,10 @@
 import { Board, BoardType } from "@/types";
-import { LinksBoard, JiraBoard, NepaliDateBoard } from "./board-types";
+import {
+  LinksBoard,
+  JiraBoard,
+  NepaliDateBoard,
+  Editor
+} from "./board-types";
 
 interface BoardRendererProps {
   board: Board;
@@ -14,6 +19,8 @@ export function BoardRenderer({ board, onUpdateBoard }: BoardRendererProps) {
       return <JiraBoard board={board} onUpdateBoard={onUpdateBoard} />;
     case "nepali-date":
       return <NepaliDateBoard />;
+    case "editor":
+      return <Editor board={board} />;
     default:
       return (
         <div className="text-center text-gray-500 dark:text-gray-400">
@@ -40,6 +47,10 @@ export const BOARD_TYPES: Record<
     label: "Nepal Date",
     description: "A board for displaying today's nepali date",
   },
+  "editor": {
+    label: "Editor",
+    description: "A board for storing notes"
+  }
 };
 
 // Helper function to get available board types

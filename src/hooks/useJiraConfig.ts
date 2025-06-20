@@ -1,8 +1,7 @@
 import { JiraConfig } from "@/types/jira";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { defaultJiraConfig } from "@/config/jira.config";
-
-const JIRA_CONFIG_KEY = "jira_config";
+import { JIRA_CONFIG_KEY } from "@/constants/storage-key";
 
 export const useJiraConfig = () => {
   const queryClient = useQueryClient();
