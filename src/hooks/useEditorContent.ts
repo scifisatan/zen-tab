@@ -1,6 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-
-const EDITOR_CONTENT_KEY = "editor_content";
+import { EDITOR_CONTENT_KEY } from "@/constants/storage-key";
 
 export const useEditorContent = (boardId: string) => {
   const queryClient = useQueryClient();
