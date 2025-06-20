@@ -3,7 +3,7 @@ import { EDITOR_CONTENT_KEY } from "@/constants/storage-key";
 
 export const useEditorContent = (boardId: string) => {
   const queryClient = useQueryClient();
-  const queryKey = [EDITOR_CONTENT_KEY, boardId];
+  const queryKey = [EDITOR_CONTENT_KEY, { boardId }];
 
   const {
     data: content,

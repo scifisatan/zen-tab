@@ -5,8 +5,8 @@ import { asyncStorage } from "@/services/storage/async-storage";
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: Infinity,
-      gcTime: Infinity,
+      staleTime: 1000 * 60 * 60 * 24,
+      gcTime: 1000 * 60 * 60 * 24,
       refetchOnMount: false,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
@@ -17,4 +17,5 @@ export const queryClient = new QueryClient({
 export const persister = createAsyncStoragePersister({
   storage: asyncStorage,
   key: "TANSTACK_QUERY_CACHE",
+  throttleTime: 1000,
 });
